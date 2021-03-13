@@ -1,9 +1,9 @@
 <?php
 session_start();
 require "db.php";
-if ($_SESSION['mailu'] !== NULL) {
+if (isset($_SESSION['mailu'])) {
   echo "<script language='javascript' type='text/javascript'>";
-  echo 'window.location.href = "listeCompteurs.php"';
+  echo 'window.location.href = "listeKits.php"';
   echo "</script>";
 }
 ?>

@@ -70,7 +70,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
           <ul class="main_menu">
             <div align="center">
               <button style="width: 180px; " type="button" onclick="location.href = 'dashboard.php'" class="btn btn-dark"> <i class="fa fa-bar-chart" aria-hidden="true"></i> DashBoard</button>
-              <button style="width: 180px; " type="button" onclick="location.href = 'listeCompteurs.php'" class="btn btn-dark"><i class="fa fa-plug" aria-hidden="true"></i>Compteurs</button>
+              <button style="width: 180px; " type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i>Mes kits</button>
               <button style="width: 180px; " type="button" onclick="location.href = 'historique.php'" class="btn btn-dark"><i class="fa fa-history" aria-hidden="true"></i> Historique</button>
             </div>
           </ul>
@@ -186,7 +186,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
         <br>
         <div align="center" style="background-color:#FF7900  ;">
           <button style="width: 180px; margin:2px" type="button" onclick="location.href = 'dashboard.php'" class="btn btn-dark"> <i class="fa fa-bar-chart" aria-hidden="true"></i> DashBoard</button> </br>
-          <button style="width: 180px; " type="button" onclick="location.href = 'listeCompteurs.php'" class="btn btn-dark"><i class="fa fa-plug" aria-hidden="true"></i> Compteurs</button></br>
+          <button style="width: 180px; " type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i> Mes kits</button></br>
           <button style="width: 180px; margin:2px" type=" button" onclick="location.href = 'historique.php'" class="btn btn-dark"><i class="fa fa-history" aria-hidden="true"></i> Historique</button>
         </div>
     </nav>

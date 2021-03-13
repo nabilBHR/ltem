@@ -73,7 +73,7 @@
 										if (strlen($motPasse) < 31) {
 											if ($motPasse == $motPasse2) {
 												if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-													$stmt = mysqli_prepare($bdd, 'SELECT email,blocage FROM utilisateur where email = ? ');
+													$stmt = mysqli_prepare($bdd, 'SELECT email,blocage FROM utilisateur where email = ? LIMIT 1');
 													mysqli_stmt_bind_param($stmt, "s", $email);
 													mysqli_stmt_execute($stmt);
 													mysqli_stmt_store_result($stmt);

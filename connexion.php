@@ -48,7 +48,7 @@
 
 	if (isset($_POST['btnCon'])) {
 		$email = $_POST['email'];
-		$stmt = mysqli_prepare($bdd, 'SELECT email, motPasse , confirmMail , blocage FROM utilisateur where email = ? ');
+		$stmt = mysqli_prepare($bdd, 'SELECT email, motPasse , confirmMail , blocage FROM utilisateur where email = ? LIMIT 1');
 		mysqli_stmt_bind_param($stmt, "s", $email);
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_store_result($stmt);
@@ -91,7 +91,7 @@
 					echo "</script>";
 				} else {
 					echo "<script language='javascript' type='text/javascript'>";
-					echo 'window.location.href = "listeCompteurs.php"';
+					echo 'window.location.href = "listeKits.php"';
 					echo "</script>";
 				}
 			}
