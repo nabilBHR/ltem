@@ -19,7 +19,6 @@ mysqli_stmt_fetch($stmt);
 $_SESSION['idu'] = $donnees['id'];
 $_SESSION['nomu'] = $donnees['nom'];
 $_SESSION['prenomu'] = $donnees['prenom'];
-$_SESSION['numeroAbonneu'] = $donnees['numeroAbonne'];
 $_SESSION['departementu'] = $donnees['departement'];
 $_SESSION['adresseu'] = $donnees['adresse'];
 $_SESSION['tel1u'] = $donnees['tel1'];

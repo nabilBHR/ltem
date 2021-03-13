@@ -2,10 +2,10 @@
 -- version 4.9.3
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:8889
--- Généré le :  sam. 06 mars 2021 à 21:44
--- Version du serveur :  5.7.26
--- Version de PHP :  7.4.2
+-- Host: localhost:8889
+-- Generation Time: Mar 13, 2021 at 10:18 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,40 +17,36 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `ltem_db`
+-- Database: `ltem_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `compteur`
+-- Table structure for table `kit`
 --
 
-CREATE TABLE `compteur` (
-  `idCompteur` int(25) UNSIGNED NOT NULL,
-  `numeroCompteur` varchar(25) NOT NULL,
-  `consommation` int(25) NOT NULL DEFAULT '0',
-  `idClient` varchar(25) NOT NULL,
-  `supprime` int(1) NOT NULL DEFAULT '0',
-  `libelle` varchar(25) NOT NULL
+CREATE TABLE `kit` (
+  `idKit` int(25) NOT NULL,
+  `imei` varchar(25) NOT NULL,
+  `serialNumber` varchar(25) NOT NULL,
+  `modele` varchar(25) NOT NULL,
+  `libelle` varchar(25) NOT NULL,
+  `idClient` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `compteur`
+-- Dumping data for table `kit`
 --
 
-INSERT INTO `compteur` (`idCompteur`, `numeroCompteur`, `consommation`, `idClient`, `supprime`, `libelle`) VALUES
-(1, '11235617464', 98754, '2', 0, 'Compteur maison'),
-(2, '11465464522', 234, '2', 0, 'Compteur magasin'),
-(22, '12234436', 0, '21', 0, 'compteur 3'),
-(23, '2314235215', 0, '2', 0, 'erkdsdfjh'),
-(24, '2314235215321cdsdsvfsb', 0, '2', 0, 'cdsvdsv'),
-(25, '23142352122', 0, '2', 0, 'erkdsdfjh');
+INSERT INTO `kit` (`idKit`, `imei`, `serialNumber`, `modele`, `libelle`, `idClient`) VALUES
+(4, '123456789123456', 'A123F44j77542G', 'MangOH Red', 'My_MangoRed_1', '2'),
+(6, '123456789123236', 'A123F44j37D42G', 'MangOH Red', 'My_MangoRed_3', '22');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `message`
+-- Table structure for table `message`
 --
 
 CREATE TABLE `message` (
@@ -63,7 +59,7 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `message`
+-- Dumping data for table `message`
 --
 
 INSERT INTO `message` (`id`, `mailEx`, `nomEx`, `date`, `contenu`, `lu`) VALUES
@@ -73,20 +69,22 @@ INSERT INTO `message` (`id`, `mailEx`, `nomEx`, `date`, `contenu`, `lu`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateur`
+-- Table structure for table `utilisateur`
 --
 
 CREATE TABLE `utilisateur` (
   `id` int(20) UNSIGNED NOT NULL,
   `nom` varchar(25) NOT NULL,
   `prenom` varchar(25) NOT NULL,
-  `numeroAbonne` varchar(25) NOT NULL,
   `departement` varchar(5) NOT NULL,
   `adresse` varchar(250) NOT NULL,
   `email` varchar(50) NOT NULL,
   `motPasse` varchar(50) NOT NULL,
   `tel1` varchar(10) NOT NULL,
   `tel2` varchar(10) DEFAULT NULL,
+  `companyName` varchar(30) NOT NULL,
+  `userName` varchar(30) NOT NULL,
+  `token` varchar(30) NOT NULL,
   `accountValidation` int(1) NOT NULL DEFAULT '1',
   `blocage` int(1) NOT NULL DEFAULT '0',
   `confirmKey` varchar(20) NOT NULL,
@@ -94,59 +92,58 @@ CREATE TABLE `utilisateur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `utilisateur`
+-- Dumping data for table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `numeroAbonne`, `departement`, `adresse`, `email`, `motPasse`, `tel1`, `tel2`, `accountValidation`, `blocage`, `confirmKey`, `confirmMail`) VALUES
-(1, 'Admin', 'Admin', '114654', '77', '5 Boulevard Descartes, 77420 Champs-sur-Marne', 'admin@projet-ltem.com', 'admin@projet-ltem.com', '0677121314', '0677121315', 1, 0, '535478726', 1),
-(2, 'Default', 'User', '112356', '77', '5 Boulevard Descartes, 77420 Champs-sur-Marne', 'utilisateur@projet-ltem.com', 'utilisateur@projet-ltem.com', '0677121316', '0677121317', 1, 0, '932864325', 1),
-(18, 'Nabil', 'Bouhar', '12345', '77', '4 allée buissonnière 77186', 'dn_bouhar@esi.dz', 'dn_bouhar@esi.dz', '0749291613', '0', 1, 0, '15473787959169179736', 1),
-(21, 'ali', 'lou', '51254748', '75', '4 allée buissonniere noisiel', 'utilisateur2@projet-ltem.com', 'mdp2021', '0787654314', '0', 1, 0, '31772351471282372261', 1);
+INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `departement`, `adresse`, `email`, `motPasse`, `tel1`, `tel2`, `companyName`, `userName`, `token`, `accountValidation`, `blocage`, `confirmKey`, `confirmMail`) VALUES
+(1, 'Admin', 'Admin', '77', '5 Boulevard Descartes, 77420 Champs-sur-Marne', 'admin@projet-ltem.com', 'admin@projet-ltem.com', '0677121314', '0677121315', '', '', '', 1, 0, '535478726', 1),
+(2, 'Default', 'User', '77', '5 Boulevard Descartes, 77420 Champs-sur-Marne', 'utilisateur@projet-ltem.com', 'utilisateur@projet-ltem.com', '0677121316', '0677121317', '', '', '', 1, 0, '932864325', 1),
+(23, 'Nabil', 'BOUHAR', '77', '4 allée buissonnière 77186', 'dn_bouhar@esi.dz', 'dn_bouhar@esi.dz', '0749291613', '0', 'simple_company_name', 'nabil_sur_octave', 'a1g4k5j86g1f4rj6vd4f2g5ju', 1, 0, '19346664287493133395', 1);
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `compteur`
+-- Indexes for table `kit`
 --
-ALTER TABLE `compteur`
-  ADD PRIMARY KEY (`idCompteur`);
+ALTER TABLE `kit`
+  ADD PRIMARY KEY (`idKit`);
 
 --
--- Index pour la table `message`
+-- Indexes for table `message`
 --
 ALTER TABLE `message`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `utilisateur`
+-- Indexes for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `compteur`
+-- AUTO_INCREMENT for table `kit`
 --
-ALTER TABLE `compteur`
-  MODIFY `idCompteur` int(25) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+ALTER TABLE `kit`
+  MODIFY `idKit` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT pour la table `message`
+-- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
--- AUTO_INCREMENT pour la table `utilisateur`
+-- AUTO_INCREMENT for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
