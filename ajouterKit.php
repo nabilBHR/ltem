@@ -76,7 +76,7 @@
 						$erreur = "<div align='center' class='alert alert-danger alert-dismissible' role='alert'>
 								<h4 class='alert-heading'>Ce kit existe déja dans nos bases de données ! <br><br></h4>
 								<hr>
-								<p class='mb-0'> contactez l\'admin pour plus d\'informations.</p>
+								<p class='mb-0'> contactez l'admin pour plus d'informations.</p>
 								</div>";
 					}
 				} else {
@@ -124,12 +124,12 @@
 									<div class="bo5 of-hidden size15 col-auto m-b-5">
 										<div class="sizefull s-text7 p-l-22 p-r-22">
 											<select class="selection-2" name="modele" required='required'>
-												<option selected disabled value="">Modele</option>
+												<option selected disabled value="">Module</option>
 												<option value="FX30">FX30 </option>
 												<option value="FX30S">FX30S </option>
 												<option value="MangOH Red">MangOH Red </option>
 												<option value="MangOH Yellow">MangOH Yellow </option>
-												<option value="WP7702">Hautes Alpes </option>
+												<option value="WP7702">WP7702 </option>
 												<option value="Autre">Autre </option>
 											</select>
 										</div>

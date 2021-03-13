@@ -10,10 +10,10 @@ if ($_SESSION['mailu'] == NULL) {
 }
 
 $mailu = $_SESSION['mailu'];
-$stmt = mysqli_prepare($bdd, 'SELECT id, nom, prenom, numeroAbonne, departement, adresse, tel1, tel2 , motPasse FROM utilisateur where email = ? ');
+$stmt = mysqli_prepare($bdd, 'SELECT id, nom, prenom, departement, adresse, tel1, tel2 , motPasse, token, userName, companyName FROM utilisateur where email = ? LIMIT 1');
 mysqli_stmt_bind_param($stmt, "s", $mailu);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $donnees['id'], $donnees['nom'], $donnees['prenom'], $donnees['numeroAbonne'], $donnees['departement'], $donnees['adresse'], $donnees['tel1'], $donnees['tel2'], $donnees['motPasse']);
+mysqli_stmt_bind_result($stmt, $donnees['id'], $donnees['nom'], $donnees['prenom'], $donnees['departement'], $donnees['adresse'], $donnees['tel1'], $donnees['tel2'], $donnees['motPasse'], $donnees['token'], $donnees['userName'], $donnees['companyName']);
 mysqli_stmt_fetch($stmt);
 
 $_SESSION['idu'] = $donnees['id'];
@@ -25,6 +25,9 @@ $_SESSION['adresseu'] = $donnees['adresse'];
 $_SESSION['tel1u'] = $donnees['tel1'];
 $_SESSION['tel2u'] = $donnees['tel2'];
 $_SESSION['motPasse'] = $donnees['motPasse'];
+$_SESSION['token'] = $donnees['token'];
+$_SESSION['userName'] = $donnees['userName'];
+$_SESSION['companyName'] = $donnees['companyName'];
 
 if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
   session_destroy();
@@ -70,7 +73,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
           <ul class="main_menu">
             <div align="center">
               <button style="width: 180px; " type="button" onclick="location.href = 'dashboard.php'" class="btn btn-dark"> <i class="fa fa-bar-chart" aria-hidden="true"></i> DashBoard</button>
-              <button style="width: 180px; " type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i>Mes kits</button>
+              <button style="width: 180px; " type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i> Mes kits</button>
               <button style="width: 180px; " type="button" onclick="location.href = 'historique.php'" class="btn btn-dark"><i class="fa fa-history" aria-hidden="true"></i> Historique</button>
             </div>
           </ul>
@@ -85,10 +88,13 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <!-- Header cart noti -->
           <div class="header-cart header-dropdown" style="background-color:#EBF5FB ; border-radius: 30px ; ">
+            <div class="alert alert-secondary" role="alert">
+              <?php echo '<strong> Utilisateur : </strong><br>' . $_SESSION['nomu'] . '	' . $_SESSION['prenomu'] . '<hr>' . '<strong> E-mail : </strong><br>' . $_SESSION['mailu']; ?>
+            </div>
             <div class="header-cart-buttons">
               <div class="header-cart-wrapbtn">
                 <!-- Button -->
-                <a href="pparametresclient.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                <a href="parametres.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
                   Paramètres
                 </a>
               </div>
@@ -115,16 +121,18 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
       <!-- Header Icon mobile -->
       <div class="header-icons-mobile">
         <span class="linedivide2"></span>
-        <?php //echo $_SESSION['nomu'].'	'.$_SESSION['prenomu'] ; 
-        ?>
+        <?php echo $_SESSION['nomu'] . '	' . $_SESSION['prenomu']; ?>
         <div class="header-wrapicon2">
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <!-- Header cart noti -->
           <div class="header-cart header-dropdown" style="background-color:#EBF5FB ; border-radius: 30px ; ">
+            <div class="alert alert-secondary" role="alert">
+              <?php echo '<strong> Utilisateur : </strong><br>' . $_SESSION['nomu'] . '	' . $_SESSION['prenomu'] . '<hr>' . '<strong> E-mail : </strong><br>' . $_SESSION['mailu']; ?>
+            </div>
             <div class="header-cart-buttons">
               <div class="header-cart-wrapbtn">
                 <!-- Button -->
-                <a href="pparametresclient.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                <a href="parametres.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
                   Paramètres
                 </a>
               </div>

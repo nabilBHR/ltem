@@ -50,7 +50,6 @@
 		if (isset($_POST['btnIns'])) {
 			$nom = $_POST['nom'];
 			$prenom = $_POST['prenom'];
-			$numeroAbonne = $_POST['numeroAbonne'];
 			$departement = $_POST['departement'];
 			$adresse = $_POST['adresse'];
 			$tel1 = $_POST['tel1'];
@@ -62,113 +61,130 @@
 			$email = $_POST['email'];
 			$motPasse = $_POST['motPasse'];
 			$motPasse2 = $_POST['motPasse2'];
+			$companyName = $_POST['companyName'];
+			$userName = $_POST['userName'];
+			$token = $_POST['token'];
 
 			if (preg_match('#^[[:alpha:]]+([\-\' ][[:alpha:]]+)*$#', $nom)  && strlen($nom) < 26 && strlen($nom) > 2) {
 				if (preg_match('#^[[:alpha:]]+([\-\' ][[:alpha:]]+)*$#', $prenom)  && strlen($prenom) < 26  && strlen($prenom) > 2) {
-					if (preg_match('`[0-9]`', $numeroAbonne) && strlen($numeroAbonne) < 26 && strlen($numeroAbonne) > 4) {
-						if (strlen($adresse) > 5 && strlen($adresse) < 251) {
-							if (preg_match('`[0-9]{10}`', $tel1) && strlen($tel1) == 10) {
-								if ((empty($_POST['tel2'])) || (preg_match('`[0-9]{10}`', $tel2) && strlen($tel2) == 10)) {
-									if (strlen($motPasse) > 5) {
-										if (strlen($motPasse) < 31) {
-											if ($motPasse == $motPasse2) {
-												if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-													$stmt = mysqli_prepare($bdd, 'SELECT email,blocage FROM utilisateur where email = ? LIMIT 1');
-													mysqli_stmt_bind_param($stmt, "s", $email);
-													mysqli_stmt_execute($stmt);
-													mysqli_stmt_store_result($stmt);
-													$verifmail = mysqli_stmt_num_rows($stmt);
-													if ($verifmail == 0) {
-														// inscription reussie
-														$longueurkey = 20;
-														$key = "";
-														for ($i = 0; $i < $longueurkey; $i++) {
-															$key .= mt_rand(0, 9);
-														}
+					if (preg_match("/^[a-zA-Z0-9]+$/", $token) && strlen($token) == 25) {
+						if (strlen($companyName) > 5 && strlen($companyName) < 31) {
+							if (strlen($userName) > 5 && strlen($userName) < 31) {
+								if (strlen($adresse) > 5 && strlen($adresse) < 251) {
+									if (preg_match('`[0-9]{10}`', $tel1) && strlen($tel1) == 10) {
+										if ((empty($_POST['tel2'])) || (preg_match('`[0-9]{10}`', $tel2) && strlen($tel2) == 10)) {
+											if (strlen($motPasse) > 5) {
+												if (strlen($motPasse) < 31) {
+													if ($motPasse == $motPasse2) {
+														if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+															$stmt = mysqli_prepare($bdd, 'SELECT email,blocage FROM utilisateur where email = ? LIMIT 1');
+															mysqli_stmt_bind_param($stmt, "s", $email);
+															mysqli_stmt_execute($stmt);
+															mysqli_stmt_store_result($stmt);
+															$verifmail = mysqli_stmt_num_rows($stmt);
+															if ($verifmail == 0) {
+																// inscription reussie
+																$longueurkey = 20;
+																$key = "";
+																for ($i = 0; $i < $longueurkey; $i++) {
+																	$key .= mt_rand(0, 9);
+																}
 
-														// Une fois mis en ligne
-														//$message ='	<a target="blank" href="https://ltem.000webhostapp.com/inscriptionConfirmed.php?mail='.urlencode($email).'&key='.$key.'"> Confirmez votre compte ! </a> ' ;
-														//mail($email, 'Confirmation de compte', $message);
+																// Une fois mis en ligne
+																//$message ='	<a target="blank" href="https://ltem.000webhostapp.com/inscriptionConfirmed.php?mail='.urlencode($email).'&key='.$key.'"> Confirmez votre compte ! </a> ' ;
+																//mail($email, 'Confirmation de compte', $message);
 
-														$sql7 = "INSERT INTO utilisateur (nom, prenom, numeroAbonne , departement, adresse, tel1 , tel2, email, motPasse, confirmKey) 
-														VALUES ('$nom', '$prenom' , '$numeroAbonne' , '$departement' , '$adresse' , '$tel1' , '$tel2' , '$email' , '$motPasse', '$key')";
-														$execute = $bdd->query($sql7);
+																$sql7 = "INSERT INTO utilisateur (nom, prenom, departement, adresse, tel1 , tel2, email, motPasse, confirmKey, token, userName, companyName) 
+														VALUES ('$nom', '$prenom' , '$departement' , '$adresse' , '$tel1' , '$tel2' , '$email' , '$motPasse', '$key', '$token', '$userName', '$companyName')";
+																$execute = $bdd->query($sql7);
 
-														echo "<script language='javascript' type='text/javascript'>";
-														echo 'window.location.href = "inscriptionSuccessMessage.php"';
-														echo "</script>";
-													} else {
-														mysqli_stmt_bind_result($stmt, $donnees['email'], $donnees['blocage']);
-														mysqli_stmt_fetch($stmt);
-														$bloc = $donnees['blocage'];
-														if ($bloc == 1) {
-															// utilisateur bloqué
-															$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+																echo "<script language='javascript' type='text/javascript'>";
+																echo 'window.location.href = "inscriptionSuccessMessage.php"';
+																echo "</script>";
+															} else {
+																mysqli_stmt_bind_result($stmt, $donnees['email'], $donnees['blocage']);
+																mysqli_stmt_fetch($stmt);
+																$bloc = $donnees['blocage'];
+																if ($bloc == 1) {
+																	// utilisateur bloqué
+																	$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 																	   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 																	   <strong> Votre adresse email est bloquée !</strong>
 																	   </div>';
-														}
-														//mysqli_free_result($result);
-														else {
-															// mail existant
-															$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+																}
+																//mysqli_free_result($result);
+																else {
+																	// mail existant
+																	$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 																	   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 																	   <strong>Il existe déja un compte pour cette adresse mail !</strong>
 																	   </div>';
-														}
-													}
-												} else {
-													$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+																}
+															}
+														} else {
+															$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 															   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 															   <strong>Votre adreese mail n\'est pas valide !</strong>
 															   </div>';
-												}
-											} else {
-												$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+														}
+													} else {
+														$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 														   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 														   <strong>Vos mots de passe ne sont pas identiques !</strong>
 														   </div>';
-											}
-										} else {
-											$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+													}
+												} else {
+													$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 											<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 											<strong>Votre mot de passe est trop long !</strong>
 											<hr>
 											<p>la longueur du mot de passe doit être comprise entre 6 et 30 caractères </p>
 											</div>';
-										}
-									} else {
-										$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+												}
+											} else {
+												$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 												   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 											   	   <strong>Votre mot de passe est trop court !</strong>
 												   <hr>
 												   <p>la longueur du mot de passe doit être comprise entre 6 et 30 caractères </p>
 												   </div>';
-									}
-								} else {
-									$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+											}
+										} else {
+											$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 										   	   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 											   <strong>Le 2ème numéro de téléphone saisi n\'est pas valide !</strong>
 											   </div>';
-								}
-							} else {
-								$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+										}
+									} else {
+										$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 										   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 										   <strong>Le 1er numéro de téléphone saisi n\'est pas valide !</strong>
 										   </div>';
-							}
-						} else {
-							$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+									}
+								} else {
+									$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 									   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 									   <strong> Votre adresse n\'est pas valide !</strong>
 									   <hr>
 									   <p>Veuillez préciser le nom et N° de rue svp !.<p>
 									   </div>';
+								}
+							} else {
+								$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+								   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								   <strong>Le nom d\'utilisateur que vous avez saisi est invalide !</strong>
+								   </div>';
+							}
+						} else {
+							$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+								   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								   <strong>Le nom de la compagnie que vous avez saisi est invalide !</strong>
+								   </div>';
 						}
 					} else {
 						$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 								   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								   <strong>Numéro d\'abonné invalide !</strong>
+								   <strong>Votre token est invalide !</strong>
 								   </div>';
 					}
 				} else {
@@ -230,11 +246,18 @@
 							<div class="col-sm-6">
 								<div class="card">
 									<div class="card-body">
-										<h5 class="card-title">Domicile et abonnement </h5>
-										<p class="card-text">
+										<h5 class="card-title">Informations sur votre compte Octave</h5>
 										<div class="bo5 of-hidden size15  col-auto m-b-5">
-											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="numeroAbonne" placeholder="Numero d'abonné" required='required'>
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="companyName" placeholder="Nom de la compagnie">
 										</div>
+										<div class="bo5 of-hidden size15  col-auto m-b-5">
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="userName" placeholder="Nom d'utilisateur sur Octave">
+										</div>
+										<div class="bo5 of-hidden size15  col-auto m-b-5">
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="token" placeholder="Votre token">
+										</div>
+										<h5 class="card-title">Domicile</h5>
+										<p class="card-text">
 										<section class="bgwhite p-t-0 p-b-0">
 											<div class="flex-m flex-w p-b-0">
 												<div class="bo5 of-hidden size15 col-auto m-b-5">
