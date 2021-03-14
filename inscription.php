@@ -67,7 +67,7 @@
 
 			if (preg_match('#^[[:alpha:]]+([\-\' ][[:alpha:]]+)*$#', $nom)  && strlen($nom) < 26 && strlen($nom) > 2) {
 				if (preg_match('#^[[:alpha:]]+([\-\' ][[:alpha:]]+)*$#', $prenom)  && strlen($prenom) < 26  && strlen($prenom) > 2) {
-					if (preg_match("/^[a-zA-Z0-9]+$/", $token) && strlen($token) == 25) {
+					if (preg_match("/^[a-zA-Z0-9]+$/", $token) && strlen($token) > 30 && strlen($token) < 40) {
 						if (strlen($companyName) > 5 && strlen($companyName) < 31) {
 							if (strlen($userName) > 5 && strlen($userName) < 31) {
 								if (strlen($adresse) > 5 && strlen($adresse) < 251) {

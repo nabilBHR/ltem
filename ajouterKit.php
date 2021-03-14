@@ -2,7 +2,6 @@
 <html lang="fr">
 
 <head>
-
 	<title>Ajout d'un kit</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,17 +47,17 @@
 
 	if (isset($_POST['btnAdd'])) {
 
-		$imei = $_POST['imei'];
-		$serialNumber = $_POST['serialNumber'];
-		$libelleKit = $_POST['libelleKit'];
-		$modele = $_POST['modele'];
+		$imei = $_POST['imeis'];
+		$libelleKit = $_POST['module'];
+		$modele = $_POST['moduleName'];
+		$serialNumber = $_POST['fsn'];
 		$idClient = $_SESSION['idu'];
 
 		if (is_numeric($imei)  && strlen($imei) < 18 && strlen($imei) > 14) {
 			if (preg_match("/^[a-zA-Z0-9]+$/", $serialNumber) && strlen($serialNumber) > 5 && strlen($serialNumber) < 26) {
 				if (strlen($libelleKit) > 2 && strlen($libelleKit) < 26) {
-					$bdd2 = new mysqli($servername, $username, $password, $dbname);
 
+					$bdd2 = new mysqli($servername, $username, $password, $dbname);
 					$stmt = mysqli_prepare($bdd2, 'SELECT imei, idClient FROM kit where imei = ? LIMIT 1');
 					mysqli_stmt_bind_param($stmt, "s", $imei);
 					mysqli_stmt_execute($stmt);
@@ -82,7 +81,7 @@
 				} else {
 					$erreur = '<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 						   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						   <strong>Le nom que vous avez choisi est invalide !</strong>
+						   <strong>Le modele saisi est invalide !</strong>
 						   </div>';
 				}
 			} else {
@@ -109,29 +108,38 @@
 					<div class="col-md-6 p-b-30">
 						<form class="leave-comment" method="post">
 							<?php echo $erreur; ?>
-
-							<div class="bo5 of-hidden size15  col-auto m-b-5">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="imei" placeholder="IMEI" required='required'>
-							</div>
-							<div class="bo5 of-hidden size15  col-auto m-b-5">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="serialNumber" placeholder="Numéro de série" required='required'>
-							</div>
-							<div class="bo5 of-hidden size15  col-auto m-b-5">
-								<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="libelleKit" placeholder="Nom sur la platforme Octave" required='required'>
-							</div>
+							<section class="bgwhite p-t-0 p-b-0">
+								<div class="form-group">
+									<select class="form-control" id="imeis" name="imeis" onchange=remplireForme()></select>
+								</div>
+							</section>
 							<section class="bgwhite p-t-0 p-b-0">
 								<div class="flex-m flex-w p-b-0">
 									<div class="bo5 of-hidden size15 col-auto m-b-5">
 										<div class="sizefull s-text7 p-l-22 p-r-22">
-											<select class="selection-2" name="modele" required='required'>
-												<option selected disabled value="">Module</option>
-												<option value="FX30">FX30 </option>
-												<option value="FX30S">FX30S </option>
-												<option value="MangOH Red">MangOH Red </option>
-												<option value="MangOH Yellow">MangOH Yellow </option>
-												<option value="WP7702">WP7702 </option>
-												<option value="Autre">Autre </option>
-											</select>
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" id="fsn" name="fsn" placeholder="fsn" required='required'>
+										</div>
+									</div>
+								</div>
+							</section>
+							<section class="bgwhite p-t-0 p-b-0">
+								<div class="flex-m flex-w p-b-0">
+									<div class="bo5 of-hidden size15 col-auto m-b-5">
+										<div class="sizefull s-text7 p-l-22 p-r-22">
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" id="moduleName" name="moduleName" placeholder="Nom du module" required='required'>
+										</div>
+									</div>
+								</div>
+							</section>
+							<section class="bgwhite p-t-0 p-b-0">
+								<div class="flex-m flex-w p-b-0">
+									<div class="bo5 of-hidden size15 col-auto m-b-5">
+										<div class="sizefull s-text7 p-l-22 p-r-22">
+
+
+											<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="module" id="module" placeholder="Module" required='required'>
+
+
 										</div>
 									</div>
 								</div>
@@ -173,7 +181,50 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="libs/js/main.js"></script>
-
 </body>
+<script>
+	var dataOctave;
+	var selectIMEIs = document.getElementById("imeis");
+	var companyName = "universit_gustave_eiffel";
+	//var dID = "d6048d14e337dab5dbbb15059";
+	var getValues = {};
+
+	$.ajax({
+		url: "https://octave-api.sierrawireless.io/v5.0/" + "<?php echo $_SESSION['companyName'] ?>" + "/device/",
+		headers: {
+			'X-Auth-User': "<?php echo $_SESSION['userName'] ?>",
+			'X-Auth-Token': "<?php echo $_SESSION['token'] ?>",
+		},
+		type: "GET",
+		cache: false,
+		success: function(data, textStatus, request) {
+			dataOctave = data;
+			data.body.forEach(function(element, key) {
+				selectIMEIs[key] = new Option(element.hardware.imei, element.hardware.imei);
+			});;
+			remplireForme();
+		},
+		error: function(request, textStatus, errorThrown) {
+			alert(request.getResponseHeader('some_header'));
+			console.log("error");
+		}
+	})
+
+	function remplireForme() {
+		var data = (dataOctave.body).find(element =>
+			element.hardware.imei === selectIMEIs.options[selectIMEIs.selectedIndex].innerHTML
+		);
+		document.getElementById("fsn").value = data.hardware.fsn;
+		document.getElementById("moduleName").value = data.name;
+		var module = document.getElementById("module");
+		if (data.hardware.module != undefined) {
+			module.value = data.hardware.module;
+			//module.disabled = true;
+		} else {
+			module.value = "";
+			module.disabled = false;
+		}
+	}
+</script>
 
 </html>

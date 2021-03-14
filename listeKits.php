@@ -5,6 +5,9 @@
 	<title>Mes kits</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--===============================================================================================-->
+	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="images/icons/favicon.png" />
 	<!--===============================================================================================-->
@@ -31,6 +34,38 @@
 	<link rel="stylesheet" type="text/css" href="libs/css/util.css">
 	<link rel="stylesheet" type="text/css" href="libs/css/main.css">
 	<!--===============================================================================================-->
+
+	<script>
+		function getTimeLastSeen(x) {
+
+			var getValue = {};
+
+			$.ajax({
+				url: "https://octave-api.sierrawireless.io/v5.0/" + "<?php echo $_SESSION['companyName'] ?>" + "/device/",
+				headers: {
+					'X-Auth-User': "<?php echo $_SESSION['userName'] ?>",
+					'X-Auth-Token': "<?php echo $_SESSION['token'] ?>",
+				},
+				type: "GET",
+				cache: false,
+				success: function(data, textStatus, request) {
+					getValue = data.body.hardware.imei;
+
+					console.log(getValue.timeSinceLastSeen / 1000);
+					if (Math.round(getValue.timeSinceLastSeen / 1000) < 180.00) {
+						document.getElementById(x).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
+					} else {
+						document.getElementById(x).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
+					};
+				},
+				error: function(request, textStatus, errorThrown) {
+					alert("erreur");
+					console.log("error");
+				}
+			})
+			return getValue;
+		}
+	</script>
 </head>
 
 <body class="animsition">
@@ -91,6 +126,7 @@
 										</tr>
 										<?php
 
+										$i = -1;
 										foreach ($data as $value) {
 											$tab = explode(";", $value);
 										?>
@@ -98,7 +134,13 @@
 												<td class="column-1"><?php echo $tab[2];  ?></td>
 												<td class="column-2"><?php echo $tab[1];  ?></td>
 												<td class="column-3"><?php echo $tab[0];  ?> </td>
-												<td class="column-3"><?php echo "non connecté";  ?> </td>
+
+												<td class="column-3" class="lastSeen" id=<?php echo $tab[0]; ?>>
+													<script>
+														getTimeLastSeen('352653090199969');
+													</script>
+												</td>
+
 												<td class="column-5">
 													<a href="dashboard.php"> <button type="button" class="btn btn-outline-info"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button> </a>
 													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" class="btn btn-outline-danger"><i style="float: left;" class="fa fa-trash-o"></i>   Supprimer</button> </a>
@@ -145,8 +187,6 @@
 	require "footer.php";
 	?>
 
-	<!--===============================================================================================-->
-	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="libs/vendor/animsition/js/animsition.min.js"></script>
 	<!--===============================================================================================-->
