@@ -5,7 +5,7 @@
 	<title>Mes kits</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
@@ -34,38 +34,6 @@
 	<link rel="stylesheet" type="text/css" href="libs/css/util.css">
 	<link rel="stylesheet" type="text/css" href="libs/css/main.css">
 	<!--===============================================================================================-->
-
-	<script>
-		function getTimeLastSeen(x) {
-
-			var getValue = {};
-
-			$.ajax({
-				url: "https://octave-api.sierrawireless.io/v5.0/" + "<?php echo $_SESSION['companyName'] ?>" + "/device/",
-				headers: {
-					'X-Auth-User': "<?php echo $_SESSION['userName'] ?>",
-					'X-Auth-Token': "<?php echo $_SESSION['token'] ?>",
-				},
-				type: "GET",
-				cache: false,
-				success: function(data, textStatus, request) {
-					getValue = data.body.hardware.imei;
-
-					console.log(getValue.timeSinceLastSeen / 1000);
-					if (Math.round(getValue.timeSinceLastSeen / 1000) < 180.00) {
-						document.getElementById(x).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
-					} else {
-						document.getElementById(x).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
-					};
-				},
-				error: function(request, textStatus, errorThrown) {
-					//alert("erreur");
-					console.log("error");
-				}
-			})
-			return getValue;
-		}
-	</script>
 </head>
 
 <body class="animsition">
@@ -118,32 +86,29 @@
 								<div class="wrap-table-shopping-cart bgwhite">
 									<table class="table-shopping-cart table-hover ">
 										<tr class="table-head" style="background-color:#00FFBF;">
-											<th style="width:24%" class="column-1">Nom</th>
-											<th style="width:13%" class="column-2">Modèle</th>
-											<th style="width:25%" class="column-3">IMEI</th>
-											<th style="width:13%" class="column-4">Status</th>
-											<th style="width:25%" class="column-5">Action</th>
+											<th style="width:24%;text-align:left" class="column-1">Nom</th>
+											<th style="width:13%;text-align:left" class="column-2">Modèle</th>
+											<th style="width:25%;text-align:left" class="column-3">IMEI</th>
+											<th style="width:7%;text-align:left" class="column-4">Synchronisé</th>
+											<th style="width:7%;text-align:left" class="column-5">Status</th>
+											<th style="width:25%;text-align:left" class="column-6">Action</th>
 										</tr>
 										<?php
 
-										$i = -1;
 										foreach ($data as $value) {
 											$tab = explode(";", $value);
 										?>
 											<tr class="table-row">
-												<td class="column-1"><?php echo $tab[2];  ?></td>
-												<td class="column-2"><?php echo $tab[1];  ?></td>
+												<td class="column-1"><?php echo $tab[1];  ?></td>
+												<td class="column-2"><?php echo $tab[2];  ?></td>
 												<td class="column-3"><?php echo $tab[0];  ?> </td>
-
-												<td class="column-3" class="lastSeen" id=<?php echo $tab[0]; ?>>
-													<script>
-														getTimeLastSeen('352653090199969');
-													</script>
-												</td>
-
-												<td class="column-5">
-													<a href="dashboard.php"> <button type="button" class="btn btn-outline-info"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button> </a>
-													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" class="btn btn-outline-danger"><i style="float: left;" class="fa fa-trash-o"></i>   Supprimer</button> </a>
+												
+												<td class="column-4" id=<?php echo "sync" . $tab[0];?>></td>
+												<td class="column-5 lastSeen" style="text-align:center;" id=<?php echo $tab[0];?>></td>
+												
+												<td class="column-6">
+													<a href="dashboard.php"> <button type="button" class="btn btn-outline-info"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button></a>
+													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" class="btn btn-outline-danger"><i style="float: left;" class="fa fa-trash-o"></i> Supprimer </button></a>
 												</td>
 											</tr>
 										<?php } ?>
@@ -196,5 +161,78 @@
 	<script src="libs/js/main.js"></script>
 
 </body>
+	<script>
+		var companyName = "universit_gustave_eiffel";
+		var userName = "yacine_hadjar";
+		var token = "shAixQsXspB5bJ6LpKBCD6myetVX86po";
+		
+		//var dID = "d6048d14e337dab5dbbb15059";
+		
+		var lastSeenElements = document.getElementsByClassName("lastSeen");	
+		
+		var dataOctave;
+		let lastSeen;
+		let getValues = [];
+		var tempValues = [];
 
+		for (var i = 0 ; i < lastSeenElements.length ; i++) {
+			getValues.push(lastSeenElements[i].id);
+		};
+	
+		getData();
+		async function getData(){
+			getValues.forEach(imei => {
+				$.ajax({
+					url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/",
+					headers: {
+						'X-Auth-User': userName,
+						'X-Auth-Token': token,
+					},
+					type: "GET",
+					cache: false,
+					success: function (data, textStatus, request) {
+						dataOctave = (data.body).find(element => {
+							return element.hardware.imei === imei;
+						});
+						if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced==true){
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
+							document.getElementById("sync"+imei).innerHTML = dataOctave.synced;
+						}else{
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
+							document.getElementById("sync"+imei).innerHTML = dataOctave.synced;
+						}
+						
+						// console.log(dataOctave.summary["/imu/temp/value"].v)
+						// get temperatures for dashboard
+						
+						// try {
+						// 	if (tempValues.length < 10){
+						// 		tempValues.push(dataOctave.summary["/imu/temp/value"].v)
+						// 	}else{
+						// 		tempValues.splice(0,1);
+						// 		tempValues.push(dataOctave.summary["/imu/temp/value"].v)
+						// 	}
+						// } catch (error) {
+						// 	//console.log(error);
+						// }
+						// console.log(tempValues);
+
+					},
+					error: function (request, textStatus, errorThrown) {
+						alert(request.getResponseHeader('error : ',error_thrown));
+						console.log("error");
+					}
+				})
+			})
+			let delayRes = await delay(500);
+		}
+
+		function delay(delayInms) {
+			return new Promise(resolve => {
+				setTimeout(() => {
+					if (true) { getData(); }
+				}, delayInms);
+			});
+		}
+	</script>
 </html>
