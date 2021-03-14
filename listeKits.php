@@ -162,11 +162,9 @@
 
 </body>
 	<script>
-		var companyName = "universit_gustave_eiffel";
-		var userName = "yacine_hadjar";
-		var token = "shAixQsXspB5bJ6LpKBCD6myetVX86po";
-		
-		//var dID = "d6048d14e337dab5dbbb15059";
+		var companyName = "<?php echo $_SESSION['companyName'] ?>";
+		var userName = "<?php echo $_SESSION['userName'] ?>";
+		var token = "<?php echo $_SESSION['token'] ?>";
 		
 		var lastSeenElements = document.getElementsByClassName("lastSeen");	
 		
@@ -196,27 +194,11 @@
 						});
 						if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced==true){
 							document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
-							document.getElementById("sync"+imei).innerHTML = dataOctave.synced;
+							document.getElementById("sync"+imei).innerHTML = "Oui";
 						}else{
 							document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
-							document.getElementById("sync"+imei).innerHTML = dataOctave.synced;
+							document.getElementById("sync"+imei).innerHTML = 'Non';
 						}
-						
-						// console.log(dataOctave.summary["/imu/temp/value"].v)
-						// get temperatures for dashboard
-						
-						// try {
-						// 	if (tempValues.length < 10){
-						// 		tempValues.push(dataOctave.summary["/imu/temp/value"].v)
-						// 	}else{
-						// 		tempValues.splice(0,1);
-						// 		tempValues.push(dataOctave.summary["/imu/temp/value"].v)
-						// 	}
-						// } catch (error) {
-						// 	//console.log(error);
-						// }
-						// console.log(tempValues);
-
 					},
 					error: function (request, textStatus, errorThrown) {
 						alert(request.getResponseHeader('error : ',error_thrown));
