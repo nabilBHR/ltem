@@ -59,7 +59,7 @@
 					};
 				},
 				error: function(request, textStatus, errorThrown) {
-					alert("erreur");
+					//alert("erreur");
 					console.log("error");
 				}
 			})
