@@ -46,6 +46,7 @@
 		<img class="fit-picture" src="images/page-under-construction.jpg" alt="Page under construction">
 	</div>
 
+
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->

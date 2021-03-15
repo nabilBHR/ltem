@@ -61,7 +61,6 @@
 
 			$articlesParPage = 5;
 
-
 			$stmt2 = mysqli_query($bdd, 'SELECT  id  FROM message ');
 			mysqli_stmt_execute($stmt2);
 			$articlesTotal = mysqli_num_rows($stmt2);
@@ -78,16 +77,10 @@
 			$depart = ($pageCourante - 1) * $articlesParPage;
 
 			if ($articlesTotal > 0) {
-
-
 				$stmt = mysqli_prepare($bdd, 'SELECT id,  mailEx , nomEx , date , contenu , lu   FROM message ORDER BY id DESC  LIMIT ? , ?');
 				mysqli_stmt_bind_param($stmt, "ii", $depart, $articlesParPage);
 				mysqli_stmt_execute($stmt);
 				mysqli_stmt_bind_result($stmt, $donnees['id'], $donnees['mailEx'], $donnees['nomEx'], $donnees['date'], $donnees['contenu'], $donnees['lu']);
-
-
-
-
 			?>
 				<section class="cart bgwhite p-t-5 p-b-5 col-md-10">
 					<div class="container">
@@ -97,30 +90,18 @@
 								<table class="table-shopping-cart table-hover">
 
 									<tr class="table-head" style="background-color:#AED6F1  ;">
-
 										<th style=" width: 25% " class="column-1">Nom de l'expiditeur</th>
 										<th style=" width: 25% " class="column-2">Email de l'expiditeur</th>
 										<th style=" width: 25% " class="column-3">Date/Heure</th>
 										<th style=" width: 25% " class="column-4">Action</th>
 
 									</tr>
-
-
-
 									<?php
-
-
 									$n = 0;
 									while (mysqli_stmt_fetch($stmt)) {
-
 									?>
-
 										<tr align="left" class="table-row">
-
-
-
 											<td class="column-1"><?php echo $donnees['nomEx'];  ?></td>
-
 											<td class="column-2"><?php echo $donnees['mailEx'];  ?></td>
 											<td class="column-3"><?php echo $donnees['date'];  ?></td>
 											<td class="column-4">
