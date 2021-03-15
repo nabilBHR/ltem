@@ -107,8 +107,8 @@
 												<td class="column-5 lastSeen" style="text-align:center;" id=<?php echo $tab[0]; ?>></td>
 
 												<td class="column-6">
-													<a href="dashboard.php"> <button type="button" class="btn btn-outline-info"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button></a>
-													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" class="btn btn-outline-danger"><i style="float: left;" class="fa fa-trash-o"></i> Supprimer </button></a>
+													<a href="dashboard.php"> <button type="button" style="width: 120px; margin: 1px;" class="btn btn-outline-info" id="but<?php echo $tab[0]; ?>"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button></a>
+													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" style="width: 120px; margin: 1px;" class="btn btn-outline-danger" id="but<?php echo $tab[0]; ?>"><i style="float: left;" class="fa fa-trash-o"></i> Supprimer </button></a>
 												</td>
 											</tr>
 										<?php } ?>
@@ -198,6 +198,7 @@
 					} else {
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = 'Non';
+						document.getElementById("but" + imei).disabled = true;
 					}
 				},
 				error: function(request, textStatus, errorThrown) {
