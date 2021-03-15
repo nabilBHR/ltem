@@ -44,14 +44,15 @@
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<!-- ICONS -->
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<style>
 		.table-striped tr{
-			height:3.4em !important;
 		}
 		.table-striped{
 			background-color:white !important;
+			box-shadow: 0 2px 6px rgb(0 0 0 / 8%);
 		}
 	</style>
 
@@ -70,48 +71,67 @@
 			</div>
 
 			<div class="row col-md-12" style="display:flex;justify-content:center;align-items:center">
-				<div class="panel-heading col-md-6">
+				<div class="panel-heading col-xl-6 col-lg-12 col-md-12">
 					<div class="alert alert-primary" role="alert">
 						<h4 class="alert-heading">Informations sur le kit</h4>
 						<hr>
-						<div align="left">
-							<p class="panel-subtitle" id="date"><b>Dérnière connexion :</b> </p>
-							<p class="panel-subtitle" id="idd"><b>ID : </b></p>
-							<p class="panel-subtitle" id="deviceName"><b>Nom du device: </b></p>
-							<p class="panel-subtitle" id="fsn"><b>Numéro de série : </b></p>
-							<p class="panel-subtitle" id="imei"><b>IMEI : </b></p>
+						<div class="row col-12">
+							<div class="col col-md-6 col-sm-12 col-12" align="left">
+								<h5> Général :</h5>
+								<p class="panel-subtitle" id="date"><b>Dérnière connexion :</b> </p>
+								<p class="panel-subtitle" id="idd"><b>ID : </b></p>
+								<p class="panel-subtitle" id="deviceName"><b>Nom du device: </b></p>
+								
+								<h5> Hardware :</h5>
+								<p class="panel-subtitle" id="fsn"><b>Numéro de série : </b></p>
+								<p class="panel-subtitle" id="imei"><b>IMEI : </b></p>
+							</div>
+							<div class="col col-md-6 col-sm-12 col-12" align="left">
+								<h5> Réseau :</h5>
+								<p><b>Rat. : </b><span class="panel-subtitle" id="rat"></span></p>
+								<p><b>Status : </b><span class="panel-subtitle" id="status"></span></p>
+								<p><b>Niveau du signal : </b><span class="panel-subtitle" id="rxLevel"></span></p>
+								<h5> Version Locale :</h5>
+								<p><b>Firmware : </b><span class="panel-subtitle" id="firmware"></span></p>
+								<p><b>Version : </b><span class="panel-subtitle" id="version"></span></p>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-xl-4 col-lg-12 col-md-12">
 					<!-- RECENT PURCHASES -->
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>LED</th>
-										<th>Date MAJ</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Rouge</td>
-										<td><span id="redLEDTime" class="label label-warning">-</td>
-										<td><span id="redLED" class="label label-success">-</span></td>
-									</tr>
-									<tr>
-										<td>Verte</td>
-										<td><span id="greenLEDTime" class="label label-warning">-</td>
-										<td><span id="greenLED" class="label label-warning">-</span></td>
-									</tr>
-									<tr>
-										<td>Bleue</td>
-										<td><span id="blueLEDTime" class="label label-warning">-</td>
-										<td><span id="blueLED" class="label label-danger">-</span></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+					<div class="panel">
+					<div class="panel-heading">
+						<h3 class="panel-title">Etat des LEDs</h3>
+					</div>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>LED</th>
+								<th>Date MAJ</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Rouge</td>
+								<td><span id="redLEDTime" class="label label-warning">-</td>
+								<td><span id="redLED" class="label label-success">-</span></td>
+							</tr>
+							<tr>
+								<td>Verte</td>
+								<td><span id="greenLEDTime" class="label label-warning">-</td>
+								<td><span id="greenLED" class="label label-warning">-</span></td>
+							</tr>
+							<tr>
+								<td>Bleue</td>
+								<td><span id="blueLEDTime" class="label label-warning">-</td>
+								<td><span id="blueLED" class="label label-danger">-</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				</div>
 			</div>		
 		
 			<div class="panel panel-headline">
@@ -245,94 +265,34 @@
 	<script src="libs/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="libs/vendor/chartist/js/chartist.min.js"></script>
 	<script src="libs/scripts/klorofil-common.js"></script>
+	
 	<script>
 		var battery;
 		var todo = false;
-		var tempValues, options;
 
 		// headline charts
-		tempValues = {
+		var tempValues = {
 			labels: [],
 			series: [[
 			],]
 		};
 
-		options = {
+		var optionsTempChart = {
 			height: 300,
-			showArea: true,
 			showLine: true,
 			showPoint: true,
 			fullWidth: true,
 			axisX: {showGrid: true},
+			axisY: {showGrid: true},
 			lineSmooth: true,
+			showArea: true,
+			chartPadding: {
+					left: 60,
+					right: 60
+			},
 		};
 		
-		new Chartist.Line('#headline-chart', tempValues, options);
-
-		$(function() {
-			
-			// visits trend charts
-			data = {
-				labels: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
-				series: [{
-					name: 'series-real',
-					data: [200, 380, 350, 320, 410, 450, 570, 400, 555, 620, 750, 900],
-				}, {
-					name: 'series-projection',
-					data: [240, 350, 360, 380, 400, 450, 480, 523, 555, 600, 700, 800],
-				}]
-			};
-
-			options = {
-				fullWidth: true,
-				lineSmooth: false,
-				height: "270px",
-				low: 0,
-				high: 'auto',
-				series: {
-					'series-projection': {
-						showArea: true,
-						showPoint: false,
-						showLine: false
-					},
-				},
-				axisX: {
-					showGrid: false,
-
-				},
-				axisY: {
-					showGrid: false,
-					onlyInteger: true,
-					offset: 0,
-				},
-				chartPadding: {
-					left: 20,
-					right: 20
-				}
-			};
-
-			new Chartist.Line('#visits-trends-chart', data, options);
-
-
-			// visits chart
-			data = {
-				labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-				series: [
-					[6384, 6342, 5437, 2764, 3958, 5068, 7654]
-				]
-			};
-
-			options = {
-				height: 300,
-				axisX: {
-					showGrid: false
-				},
-			};
-
-			new Chartist.Bar('#visits-chart', data, options);
-			
-			
-		});
+		new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
 		
 		var sysLoad = $('#system-load').easyPieChart({
 			size: 50,
@@ -342,7 +302,7 @@
 			trackColor: 'rgba(245, 245, 245)',
 			scaleColor: false,
 			lineWidth: 7,
-			animate: 500
+			animate: 800
 		});
 		
 		//get device informations here 
@@ -367,7 +327,7 @@
 						octaveCall(todo);
 						$("#percent").text(battery+"%");
 						sysLoad.data('easyPieChart').update(battery);
-						new Chartist.Line('#headline-chart', tempValues, options);
+						new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
 					}
 				}, delayInms);
 			});
@@ -405,6 +365,13 @@
 					document.getElementById("redLED").innerHTML = getSummary["/leds/tri/red/enable"].v;
 					document.getElementById("greenLED").innerHTML = getSummary["/leds/tri/green/enable"].v;
 					document.getElementById("blueLED").innerHTML = getSummary["/leds/tri/blue/enable"].v;
+					
+					document.getElementById("rat").innerHTML = getValues.report.signal.rat.value;
+					document.getElementById("status").innerHTML = JSON.parse(getSummary["/util/cellular/signal/value"].v).status;
+					document.getElementById("rxLevel").innerHTML = getValues.report.signal.strength.value;
+					
+					document.getElementById("firmware").innerHTML = getValues.localVersions.firmware;
+					document.getElementById("version").innerHTML = getValues.localVersions.edge;
 
 					let dateMajLed =  new Date(getSummary["/leds/tri/red/enable"].ts)
 					
@@ -413,7 +380,7 @@
 					document.getElementById("blueLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
 
 					try {
-						if (tempValues.series[0].length < 20){
+						if (tempValues.series[0].length < 17){
 							tempValues.series[0].push(convertTempFtoC(getSummary["/imu/temp/value"].v).toFixed(2));
 							tempValues.labels.push(new Date(getSummary["/imu/temp/value"].ts).toLocaleTimeString());
 						}else{
@@ -425,8 +392,6 @@
 					} catch (error) {
 						//console.log(error);
 					}
-					console.log(tempValues);
-
 				},
 				error: function(request, textStatus, errorThrown) {
 					alert(request.getResponseHeader('some_header'));
