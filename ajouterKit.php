@@ -205,8 +205,8 @@
 			remplireForme();
 		},
 		error: function(request, textStatus, errorThrown) {
-			alert(request.getResponseHeader('some_header'));
-			console.log("error");
+			alert("Erreur d'authetification sur Octave ! Veuillez raffraichir la page et si ca persiste contacter l'admin.");
+			console.log("Erreur d'authetification sur Octave");
 		}
 	})
 

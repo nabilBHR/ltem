@@ -9,24 +9,11 @@ if ($_SESSION['mailu'] == NULL) {
   echo "</script>";
 }
 
-$mailu = $_SESSION['mailu'];
-$stmt = mysqli_prepare($bdd, 'SELECT id, nom, prenom, departement, adresse, tel1, tel2 , motPasse, token, userName, companyName FROM utilisateur where email = ? LIMIT 1');
-mysqli_stmt_bind_param($stmt, "s", $mailu);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $donnees['id'], $donnees['nom'], $donnees['prenom'], $donnees['departement'], $donnees['adresse'], $donnees['tel1'], $donnees['tel2'], $donnees['motPasse'], $donnees['token'], $donnees['userName'], $donnees['companyName']);
-mysqli_stmt_fetch($stmt);
-
-$_SESSION['idu'] = $donnees['id'];
-$_SESSION['nomu'] = $donnees['nom'];
-$_SESSION['prenomu'] = $donnees['prenom'];
-$_SESSION['departementu'] = $donnees['departement'];
-$_SESSION['adresseu'] = $donnees['adresse'];
-$_SESSION['tel1u'] = $donnees['tel1'];
-$_SESSION['tel2u'] = $donnees['tel2'];
-$_SESSION['motPasse'] = $donnees['motPasse'];
-$_SESSION['token'] = $donnees['token'];
-$_SESSION['userName'] = $donnees['userName'];
-$_SESSION['companyName'] = $donnees['companyName'];
+if ($_SESSION['mailu'] == "admin@projet-ltem.com") {
+  echo "<script language='javascript' type='text/javascript'>";
+  echo 'window.location.href = "listKitsAdmin.php"';
+  echo "</script>";
+}
 
 if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
   session_destroy();

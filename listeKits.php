@@ -5,7 +5,7 @@
 	<title>Mes kits</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
@@ -102,10 +102,10 @@
 												<td class="column-1"><?php echo $tab[1];  ?></td>
 												<td class="column-2"><?php echo $tab[2];  ?></td>
 												<td class="column-3"><?php echo $tab[0];  ?> </td>
-												
-												<td class="column-4" id=<?php echo "sync" . $tab[0];?>></td>
-												<td class="column-5 lastSeen" style="text-align:center;" id=<?php echo $tab[0];?>></td>
-												
+
+												<td class="column-4" id=<?php echo "sync" . $tab[0]; ?>></td>
+												<td class="column-5 lastSeen" style="text-align:center;" id=<?php echo $tab[0]; ?>></td>
+
 												<td class="column-6">
 													<a href="dashboard.php"> <button type="button" class="btn btn-outline-info"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Capturer </button></a>
 													<a href="deleteKit.php?imei=<?php echo $tab[0]; ?>"><button type="button" class="btn btn-outline-danger"><i style="float: left;" class="fa fa-trash-o"></i> Supprimer </button></a>
@@ -161,60 +161,63 @@
 	<script src="libs/js/main.js"></script>
 
 </body>
-	<script>
-		var companyName = "<?php echo $_SESSION['companyName'] ?>";
-		var userName = "<?php echo $_SESSION['userName'] ?>";
-		var token = "<?php echo $_SESSION['token'] ?>";
-		
-		var lastSeenElements = document.getElementsByClassName("lastSeen");	
-		
-		var dataOctave;
-		let lastSeen;
-		let getValues = [];
-		var tempValues = [];
+<script>
+	var companyName = "<?php echo $_SESSION['companyName'] ?>";
+	var userName = "<?php echo $_SESSION['userName'] ?>";
+	var token = "<?php echo $_SESSION['token'] ?>";
 
-		for (var i = 0 ; i < lastSeenElements.length ; i++) {
-			getValues.push(lastSeenElements[i].id);
-		};
-	
-		getData();
-		async function getData(){
-			getValues.forEach(imei => {
-				$.ajax({
-					url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/",
-					headers: {
-						'X-Auth-User': userName,
-						'X-Auth-Token': token,
-					},
-					type: "GET",
-					cache: false,
-					success: function (data, textStatus, request) {
-						dataOctave = (data.body).find(element => {
-							return element.hardware.imei === imei;
-						});
-						if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced==true){
-							document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
-							document.getElementById("sync"+imei).innerHTML = "Oui";
-						}else{
-							document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
-							document.getElementById("sync"+imei).innerHTML = 'Non';
-						}
-					},
-					error: function (request, textStatus, errorThrown) {
-						alert(request.getResponseHeader('error : ',error_thrown));
-						console.log("error");
+	var lastSeenElements = document.getElementsByClassName("lastSeen");
+
+	var dataOctave;
+	let lastSeen;
+	let getValues = [];
+	var tempValues = [];
+
+	for (var i = 0; i < lastSeenElements.length; i++) {
+		getValues.push(lastSeenElements[i].id);
+	};
+
+	getData();
+	async function getData() {
+		getValues.forEach(imei => {
+			$.ajax({
+				url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/",
+				headers: {
+					'X-Auth-User': userName,
+					'X-Auth-Token': token,
+				},
+				type: "GET",
+				cache: false,
+				success: function(data, textStatus, request) {
+					dataOctave = (data.body).find(element => {
+						return element.hardware.imei === imei;
+					});
+					if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced == true) {
+						document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
+						document.getElementById("sync" + imei).innerHTML = "Oui";
+					} else {
+						document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
+						document.getElementById("sync" + imei).innerHTML = 'Non';
 					}
-				})
+				},
+				error: function(request, textStatus, errorThrown) {
+					alert("Erreur d'authetification sur Octave ! Veuillez raffraichir la page et si ca persiste contacter l'admin.");
+					console.log("Erreur d'authetification sur Octave");
+				}
 			})
-			let delayRes = await delay(500);
-		}
+		})
+		let delayRes = await delay(500);
+	}
 
-		function delay(delayInms) {
-			return new Promise(resolve => {
-				setTimeout(() => {
-					if (true) { getData(); }
-				}, delayInms);
-			});
-		}
-	</script>
+	function delay(delayInms) {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				if (true) {
+					getData();
+				}
+			}, delayInms);
+		});
+	}
+</script>
+
 </html>

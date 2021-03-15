@@ -48,18 +48,24 @@
 
 	if (isset($_POST['btnCon'])) {
 		$email = $_POST['email'];
-		$stmt = mysqli_prepare($bdd, 'SELECT email, motPasse , confirmMail , blocage FROM utilisateur where email = ? LIMIT 1');
+		$stmt = mysqli_prepare($bdd, 'SELECT email, motPasse , confirmMail , blocage, id, nom, prenom, token, userName, companyName FROM utilisateur where email = ? LIMIT 1');
 		mysqli_stmt_bind_param($stmt, "s", $email);
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_store_result($stmt);
 		$verifmail = mysqli_stmt_num_rows($stmt);
 
 		if ($verifmail == 1) {
-			mysqli_stmt_bind_result($stmt, $donnees['email'], $donnees['motPasse'], $donnees['confirmMail'], $donnees['blocage']);
+			mysqli_stmt_bind_result($stmt, $donnees['email'], $donnees['motPasse'], $donnees['confirmMail'], $donnees['blocage'], $donnees['id'], $donnees['nom'], $donnees['prenom'], $donnees['token'], $donnees['userName'], $donnees['companyName']);
 			mysqli_stmt_fetch($stmt);
 			$bloc = $donnees['blocage'];
 			$valid = $donnees['confirmMail'];
 			$mdp = $donnees['motPasse'];
+			$idu = $donnees['id'];
+			$nomu = $donnees['nom'];
+			$prenomu = $donnees['prenom'];
+			$tokenu = $donnees['token'];
+			$userNameu = $donnees['userName'];
+			$companyNameu = $donnees['companyName'];
 
 			if ($bloc == 1) {
 				// utilisateur bloqué
@@ -85,11 +91,19 @@
 
 				// Utilisateur connecté !
 				$_SESSION['mailu'] = $email;
-				if ($_POST['email'] == "admin@projet-ltem.com") {
+				if ($email == "admin@projet-ltem.com") {
 					echo "<script language='javascript' type='text/javascript'>";
 					echo 'window.location.href = "listKitsAdmin.php"';
 					echo "</script>";
 				} else {
+
+					$_SESSION['idu'] = $idu;
+					$_SESSION['nomu'] = $nomu;
+					$_SESSION['prenomu'] = $prenomu;
+					$_SESSION['token'] = $tokenu;
+					$_SESSION['userName'] = $userNameu;
+					$_SESSION['companyName'] = $companyNameu;
+
 					echo "<script language='javascript' type='text/javascript'>";
 					echo 'window.location.href = "listeKits.php"';
 					echo "</script>";

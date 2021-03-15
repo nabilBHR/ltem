@@ -143,7 +143,6 @@
 									<?php
 										$n++;
 									}
-									mysqli_close($bdd);
 									?>
 								</table>
 							</div>
