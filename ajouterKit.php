@@ -215,14 +215,16 @@
 			element.hardware.imei === selectIMEIs.options[selectIMEIs.selectedIndex].innerHTML
 		);
 		document.getElementById("fsn").value = data.hardware.fsn;
+		document.getElementById("fsn").setAttribute('readonly', true);
 		document.getElementById("moduleName").value = data.name;
+		document.getElementById("moduleName").setAttribute('readonly', true);
 		var module = document.getElementById("module");
 		if (data.hardware.module != undefined) {
 			module.value = data.hardware.module;
-			//module.disabled = true;
+			module.setAttribute('readonly', true);
 		} else {
 			module.value = "";
-			module.disabled = false;
+			module.removeAttribute('readonly');
 		}
 	}
 </script>
