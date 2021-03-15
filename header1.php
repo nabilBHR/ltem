@@ -12,26 +12,6 @@ if (isset($_SESSION['mailu'])) {
 <header class="header1">
   <!-- Header desktop -->
   <div class="container-menu-header">
-    <div class="topbar">
-
-      <table>
-        <tr>
-          <th class="col-lg-12 col-md-6">
-            <div class="col-lg-12 col-md-6">
-              <div class="media">
-                <div class="d-flex">
-                  <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
-                </div>
-                <div class="media-body">
-                  Mettre un truc ici ...
-                </div>
-              </div>
-            </div>
-          </th>
-        </tr>
-      </table>
-
-    </div>
 
     <div style="background-color:#FF7900  ;" class="wrap_header">
       <!-- Logo -->
@@ -73,53 +53,5 @@ if (isset($_SESSION['mailu'])) {
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Menu Mobile -->
-  <div class="wrap-side-menu">
-    <nav class="side-menu">
-      <div">
-        <br>
-        <div class="col-lg-11 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-map-marker"></i></div>
-            </div>
-            <div class="media-body">
-              <p></p>Magasin Wa3ou Electronics <br />Rue Hassiba Ben Bouali, Alger centre.</p>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="col-lg-10 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-phone"></i></div>
-            </div>
-            <div class="media-body">
-              <a href="tel:+1109171234567">0558947335</a> <br>
-              <a href="tel:+1101911897654">0555678854</a>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="col-lg-10 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
-            </div>
-            <div class="media-body">
-              Mettre un truc ici ...
-            </div>
-          </div>
-        </div>
-        <br>
-
-  </div>
-  </nav>
   </div>
 </header>

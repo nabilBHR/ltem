@@ -46,7 +46,7 @@ if (isset($_POST['contactadmin'])) {
 	<div class="flex-w p-b-90">
 		<div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
 			<h4 class="s-text12 p-b-30">
-				A propos de notre magasin
+				A propos de nous
 			</h4>
 
 			<div>
@@ -57,7 +57,7 @@ if (isset($_POST['contactadmin'])) {
 							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-map-marker"></i></div>
 						</div>
 						<div class="media-body">
-							Magasin Wa3ou Electronics <br />Rue Hassiba Ben Bouali, Alger centre
+							Université Gustave Eiffel <br />5 Boulevard Descates, 77420, Champs-sur-marne, FR
 						</div>
 					</div>
 				</div>
@@ -70,8 +70,9 @@ if (isset($_POST['contactadmin'])) {
 							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-phone"></i></div>
 						</div>
 						<div class="media-body">
-							<a href="tel:+1109171234567">0558947335</a> <br>
-							<a href="tel:+1101911897654">0555678854</a>
+							<a href="tel:+33649789816">0649789816</a>
+							<a href="tel:+33636115370">0636115370</a>
+							<a href="tel:+33749291613">0749291613</a>
 						</div>
 					</div>
 				</div>
@@ -84,8 +85,8 @@ if (isset($_POST['contactadmin'])) {
 							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
 						</div>
 						<div class="media-body">
-							<a href="mailto:busines@persuit.com">busines@wa3ou.com</a> <br>
-							<a href="mailto:support@persuit.com">support@wa3ou.com</a>
+							<a href="mailto:busines@persuit.com">business@orange.com</a> <br>
+							<a href="mailto:support@persuit.com">support@orange.com</a>
 						</div>
 					</div>
 				</div>
@@ -107,16 +108,27 @@ if (isset($_POST['contactadmin'])) {
 
 		<div class="w-size8 p-t-30 p-l-15 p-r-15 respon3">
 			<h4 class="s-text12 p-b-30">
-				Nos Services
+				Nos solutions
 			</h4>
 
 			<div class="col-lg-10 col-md-6">
 				<div class="media">
 					<div class="d-flex">
-						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-calendar"></i></div>
+						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-connectdevelop"></i></div>
 					</div>
 					<div class="media-body">
-						Notre site est accessible 24h/24
+						<a href="#">Internet des Objets</a>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="col-lg-10 col-md-6">
+				<div class="media">
+					<div class="d-flex">
+						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-cloud"></i></div>
+					</div>
+					<div class="media-body">
+						<a href="#">Cloud</a>
 					</div>
 				</div>
 			</div>
@@ -127,18 +139,7 @@ if (isset($_POST['contactadmin'])) {
 						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-home"></i></div>
 					</div>
 					<div class="media-body">
-						Faîtes vos commandes sans vous déplacer
-					</div>
-				</div>
-			</div>
-			<hr>
-			<div class="col-lg-10 col-md-6">
-				<div class="media">
-					<div class="d-flex">
-						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-truck"></i></div>
-					</div>
-					<div class="media-body">
-						Recevez Vos commandes dés le lendemain</br>
+						<a href="#">Domotique</a>
 					</div>
 				</div>
 			</div>
@@ -173,6 +174,7 @@ if (isset($_POST['contactadmin'])) {
 			</form>
 		</div>
 	</div>
+
 </footer>
 
 <!-- Back to top -->
