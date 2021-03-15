@@ -46,93 +46,49 @@
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+	<style>
+		.table-striped tr{
+			height:3.4em !important;
+		}
+		.table-striped{
+			background-color:white !important;
+		}
+	</style>
+
 </head>
 
 <body class="animsition">
 	<?php require "header2.php"; ?>
 	<div class="main-content">
-		<div class="container-fluid">
+		<div align="center" class="container-fluid">
 			<!-- OVERVIEW -->
-			<div class="panel panel-headline">
-				<div class="panel-heading">
-					<h1 style="font-size:30px" class="panel-title">Overview</h3>
-						<p class="panel-subtitle" id="date">Last seen : </p>
-
-						<h3 class="panel-title">Device : </h3>
-						<p class="panel-subtitle" id="idd">ID : </p>
-						<p class="panel-subtitle" id="deviceName">Name : </p>
-						<p class="panel-subtitle" id="fsn">Serial Number : </p>
-						<p class="panel-subtitle" id="imei">IMEI : </p>
-						<input type="button" id="buttonOctave" value="octave" onclick="octaveCall(inverseTodo())" />
-						<input type="button" value="stop" onclick="inverseTodo()" />
-				</div>
-
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-4">
-							<div class="metric">
-								<span class="icon"><i class="fas fa-temperature-low"></i></span>
-								<p>
-									<span class="number" id="temperatureC">1,252 C°</span>
-									<span class="title">Temperature</span>
-								</p>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="metric">
-								<span class="icon"><i class="fas fa-water"></i></span>
-								<p>
-									<span class="number" id="humidite">50.21 %</span>
-									<span class="title">Humidity</span>
-								</p>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="metric">
-								<span class="icon"><i class="fa fa-eye"></i></span>
-								<p>
-									<span class="number" id="pression">1.01 Atm</span>
-									<span class="title">Pressure</span>
-								</p>
-							</div>
-						</div>
-						<!-- <div class="col-md-3">
-							<div class="metric">
-								<span class="icon"><i class="fas fa-lightbulb"></i></span>
-								<p>
-									<span class="number" id="redLED"></span>
-									<span class="number" id="greenLED"></span>
-									<span class="number" id="blueLED"></span>
-									<span class="title">Leds stat</span>
-								</p>
-							</div>
-						</div> -->
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div id="headline-chart" class="ct-chart"></div>
-						</div>
-
-					</div>
-				</div>
+			<h1 style="font-size:30px" class="panel-title">Dashboard</h1>
+			
+			<div class="buttons" style="margin:.5em">
+				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
+				<button type="button" class="btn btn-danger" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
 			</div>
-			<!-- END OVERVIEW -->
-			<div class="row">
+
+			<div class="row col-md-12" style="display:flex;justify-content:center;align-items:center">
+				<div class="panel-heading col-md-6">
+					<div class="alert alert-primary" role="alert">
+						<h4 class="alert-heading">Informations sur le kit</h4>
+						<hr>
+						<div align="left">
+							<p class="panel-subtitle" id="date"><b>Dérnière connexion :</b> </p>
+							<p class="panel-subtitle" id="idd"><b>ID : </b></p>
+							<p class="panel-subtitle" id="deviceName"><b>Nom du device: </b></p>
+							<p class="panel-subtitle" id="fsn"><b>Numéro de série : </b></p>
+							<p class="panel-subtitle" id="imei"><b>IMEI : </b></p>
+						</div>
+					</div>
+				</div>
 				<div class="col-md-6">
 					<!-- RECENT PURCHASES -->
-					<div class="panel">
-						<div class="panel-heading">
-							<h3 class="panel-title">Etat des LEDs</h3>
-							<div class="right">
-								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-								<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-							</div>
-						</div>
-						<div class="panel-body no-padding">
 							<table class="table table-striped">
 								<thead>
 									<tr>
-										<th>Couleur</th>
+										<th>LED</th>
 										<th>Date MAJ</th>
 										<th>Status</th>
 									</tr>
@@ -140,63 +96,111 @@
 								<tbody>
 									<tr>
 										<td>Rouge</td>
-										<td>-</td>
+										<td><span id="redLEDTime" class="label label-warning">-</td>
 										<td><span id="redLED" class="label label-success">-</span></td>
 									</tr>
 									<tr>
 										<td>Verte</td>
-										<td>-</td>
+										<td><span id="greenLEDTime" class="label label-warning">-</td>
 										<td><span id="greenLED" class="label label-warning">-</span></td>
 									</tr>
 									<tr>
 										<td>Bleue</td>
-										<td>-</td>
+										<td><span id="blueLEDTime" class="label label-warning">-</td>
 										<td><span id="blueLED" class="label label-danger">-</span></td>
 									</tr>
-
 								</tbody>
 							</table>
 						</div>
-
-					</div>
-					<!-- END RECENT PURCHASES -->
-				</div>
-				<div class="col-md-6">
-					<!-- MULTI CHARTS -->
-					<div class="panel">
-						<div class="panel-heading">
-							<h3 class="panel-title">Projection vs. Realization</h3>
-							<div class="right">
-								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-								<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+			</div>		
+		
+			<div class="panel panel-headline">
+				<br>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="metric">
+								<span style="border-radius: 50%;float: left;width: 50px;height: 50px;line-height: 50px;background-color: white;text-align: center;">
+									<div id="system-load" class="easy-pie-chart" data-percent="0"></div>
+								</span>
+								<p>
+									<span class="number" id="percent" style="background-color:white !important;">0%</span>
+									<span class="title">Batterie</span>
+								</p>
+								</p>
 							</div>
 						</div>
-						<div class="panel-body">
-							<div id="visits-trends-chart" class="ct-chart"></div>
+						<div class="col-md-3">
+							<div class="metric">
+								<span class="icon"><i class="fas fa-temperature-low"></i></span>
+								<p>
+									<span class="number" id="temperatureC">1,252 C°</span>
+									<span class="title">Température</span>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="metric">
+								<span class="icon"><i class="fas fa-water"></i></span>
+								<p>
+									<span class="number" id="humidite">50.21 %</span>
+									<span class="title">Humidité</span>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="metric">
+								<span class="icon"><i class="fa fa-eye"></i></span>
+								<p>
+									<span class="number" id="pression">1.01 Atm</span>
+									<span class="title">Pression</span>
+								</p>
+							</div>
 						</div>
 					</div>
-					<!-- END MULTI CHARTS -->
+					<div class="row">
+						<div class="col-md-12">
+							<div id="headline-chart" class="ct-chart"></div>
+						</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<!-- VISIT CHART -->
-					<div class="panel">
-						<div class="panel-heading">
-							<h3 class="panel-title">Website Visits</h3>
-							<div class="right">
-								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-								<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-							</div>
-						</div>
-						<div class="panel-body">
-							<div id="visits-chart" class="ct-chart"></div>
-						</div>
+		</div>
+	</div>
+	
+	<div class="row col-md-12">
+		<div class="col-md-6">
+			<!-- MULTI CHARTS -->
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Projection vs. Realization</h3>
+					<div class="right">
+						<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+						<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
 					</div>
-					<!-- END VISIT CHART -->
 				</div>
-				<div class="col-md-4">
-					<!-- REALTIME CHART -->
+				<div class="panel-body">
+					<div id="visits-trends-chart" class="ct-chart"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Website Visits</h3>
+					<div class="right">
+						<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+						<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div id="visits-chart" class="ct-chart"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+				
+				<!-- REALTIME CHART -->
+				<!-- <div class="col-md-4">
 					<div class="panel">
 						<div class="panel-heading">
 							<h3 class="panel-title">System Load</h3>
@@ -218,7 +222,7 @@
 								<li>Processes: <span>259</span></li>
 							</ul>
 						</div>
-					</div>
+					</div> -->
 					<!-- END REALTIME CHART -->
 				</div>
 			</div>
@@ -242,32 +246,31 @@
 	<script src="libs/vendor/chartist/js/chartist.min.js"></script>
 	<script src="libs/scripts/klorofil-common.js"></script>
 	<script>
+		var battery;
+		var todo = false;
+		var tempValues, options;
+
+		// headline charts
+		tempValues = {
+			labels: [],
+			series: [[
+			],]
+		};
+
+		options = {
+			height: 300,
+			showArea: true,
+			showLine: true,
+			showPoint: true,
+			fullWidth: true,
+			axisX: {showGrid: true},
+			lineSmooth: true,
+		};
+		
+		new Chartist.Line('#headline-chart', tempValues, options);
+
 		$(function() {
-			var data, options;
-
-			// headline charts
-			data = {
-				labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-				series: [
-					[23, 29, 24, 40, 25, 24, 35],
-				]
-			};
-
-			options = {
-				height: 300,
-				showArea: true,
-				showLine: true,
-				showPoint: true,
-				fullWidth: true,
-				axisX: {
-					showGrid: true
-				},
-				lineSmooth: false,
-			};
-
-			new Chartist.Line('#headline-chart', data, options);
-
-
+			
 			// visits trend charts
 			data = {
 				labels: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -327,40 +330,22 @@
 			};
 
 			new Chartist.Bar('#visits-chart', data, options);
-
-
-			// real-time pie chart
-			var sysLoad = $('#system-load').easyPieChart({
-				size: 130,
-				barColor: function(percent) {
-					return "rgb(" + Math.round(200 * percent / 100) + ", " + Math.round(200 * (1.1 - percent / 100)) + ", 0)";
-				},
-				trackColor: 'rgba(245, 245, 245, 0.8)',
-				scaleColor: false,
-				lineWidth: 5,
-				lineCap: "square",
-				animate: 800
-			});
-
-			var updateInterval = 3000; // in milliseconds
-
-			setInterval(function() {
-				var randomVal;
-				randomVal = getRandomInt(0, 100);
-
-				sysLoad.data('easyPieChart').update(randomVal);
-				sysLoad.find('.percent').text(randomVal);
-			}, updateInterval);
-
-			function getRandomInt(min, max) {
-				return 10;
-			}
-
+			
+			
 		});
-
-
+		
+		var sysLoad = $('#system-load').easyPieChart({
+			size: 50,
+			barColor: function(percent) {
+				return "rgb(" + Math.round(200 * (1.1 - percent / 200)) + ", " + Math.round(200 * percent / 100) + ", 0)";
+			},
+			trackColor: 'rgba(245, 245, 245)',
+			scaleColor: false,
+			lineWidth: 7,
+			animate: 500
+		});
+		
 		//get device informations here 
-		var todo = false;
 
 		function convertTempFtoC(f) {
 			return (5 / 9) * (f - 32)
@@ -380,6 +365,9 @@
 				setTimeout(() => {
 					if (todo) {
 						octaveCall(todo);
+						$("#percent").text(battery+"%");
+						sysLoad.data('easyPieChart').update(battery);
+						new Chartist.Line('#headline-chart', tempValues, options);
 					}
 				}, delayInms);
 			});
@@ -402,14 +390,14 @@
 				success: function(data, textStatus, request) {
 
 					getValues = data.body;
-					console.log(data);
 					getSummary = getValues.summary;
-					document.getElementById("idd").innerHTML = "ID : " + getValues.id;
-					document.getElementById("deviceName").innerHTML = "Name : " + getValues.name;
-					document.getElementById("date").innerHTML = "Last seen : " + new Date(getValues.lastSeen).toLocaleDateString("fr-FR") + " " + new Date(getValues.lastSeen).toLocaleTimeString();
-					console.log(getSummary["/leds/tri/red/enable"].v + " " + getSummary["/leds/tri/green/enable"].v + " " + getSummary["/leds/tri/blue/enable"].v);
-					document.getElementById("imei").innerHTML = "IMEI : " + getValues.hardware.imei;
-					document.getElementById("fsn").innerHTML = "Serial Number : " + getValues.hardware.fsn;
+					battery = JSON.parse(getSummary["/battery/value"].s).percent;
+					document.getElementById("idd").innerHTML = "<b>ID : </b>" + getValues.id;
+					document.getElementById("deviceName").innerHTML = "<b>Nom du device: </b>" + getValues.name;
+					document.getElementById("date").innerHTML = "<b>Dérnière connexion :</b>" + new Date(getValues.lastSeen).toLocaleDateString("fr-FR") + " " + new Date(getValues.lastSeen).toLocaleTimeString();
+					//console.log(getSummary["/leds/tri/red/enable"].v + " " + getSummary["/leds/tri/green/enable"].v + " " + getSummary["/leds/tri/blue/enable"].v);
+					document.getElementById("imei").innerHTML = "<b>IMEI : </b>" + getValues.hardware.imei;
+					document.getElementById("fsn").innerHTML = "<b>Numéro de série : </b>" + getValues.hardware.fsn;
 
 					document.getElementById("temperatureC").innerHTML = convertTempFtoC((getSummary["/imu/temp/value"].v)).toFixed(2) + " C°";
 					document.getElementById("pression").innerHTML = convertPascaltoAtm(JSON.parse(getSummary["/environment/value"].s).pressure).toFixed(2) + " Atm";
@@ -418,13 +406,34 @@
 					document.getElementById("greenLED").innerHTML = getSummary["/leds/tri/green/enable"].v;
 					document.getElementById("blueLED").innerHTML = getSummary["/leds/tri/blue/enable"].v;
 
+					let dateMajLed =  new Date(getSummary["/leds/tri/red/enable"].ts)
+					
+					document.getElementById("redLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
+					document.getElementById("greenLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
+					document.getElementById("blueLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
+
+					try {
+						if (tempValues.series[0].length < 20){
+							tempValues.series[0].push(convertTempFtoC(getSummary["/imu/temp/value"].v).toFixed(2));
+							tempValues.labels.push(new Date(getSummary["/imu/temp/value"].ts).toLocaleTimeString());
+						}else{
+							tempValues.series[0].splice(0,1);
+							tempValues.labels.splice(0,1);
+							tempValues.series[0].push(convertTempFtoC(getSummary["/imu/temp/value"].v).toFixed(2));
+							tempValues.labels.push(new Date(getSummary["/imu/temp/value"].ts).toLocaleTimeString());
+						}
+					} catch (error) {
+						//console.log(error);
+					}
+					console.log(tempValues);
+
 				},
 				error: function(request, textStatus, errorThrown) {
 					alert(request.getResponseHeader('some_header'));
 					console.log("error");
 				}
 			})
-			let delayRes = await delay(100);
+			let delayRes = await delay(1000);
 		}
 	</script>
 
