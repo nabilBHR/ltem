@@ -187,27 +187,27 @@
 					<div class="row">
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/air-quality.png" />
 								<p>
-									<span class="number" id="co2"> - mb</span>
+									<span class="number" id="co2"> - </span>
 									<span class="title">CO2</span>
 								</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/breath.png" />
 								<p>
-									<span class="number" id="airqualite"> - mb</span>
+									<span class="number" id="airqualite"> - </span>
 									<span class="title">iaq</span>
 								</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/sunlight.png" />
 								<p>
-									<span class="number" id="light"> - mb</span>
+									<span class="number" id="light"> - %</span>
 									<span class="title">Lumière</span>
 								</p>
 							</div>
