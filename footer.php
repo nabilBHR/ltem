@@ -41,10 +41,21 @@ if (isset($_POST['contactadmin'])) {
 }
 ?>
 
+<style>
+	.myico {
+		font-size: 24px;
+	}
+
+	footer p {
+		font-size: 16px;
+		color: black;
+	}
+</style>
+
 <!-- Footer -->
-<footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45" style=" background-color:#FF7900;  ">
-	<div class="flex-w p-b-90">
-		<div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
+<footer class="bg6 p-b-25 p-l-25 p-r-25" style=" background-color:#FF7900;  ">
+	<div class="flex-w">
+		<div class="w-size6 p-t-25 p-l-15 p-r-15 respon3">
 			<h4 class="s-text12 p-b-30">
 				A propos de nous
 			</h4>
@@ -54,10 +65,10 @@ if (isset($_POST['contactadmin'])) {
 				<div class="col-lg-11 col-md-6">
 					<div class="media">
 						<div class="d-flex">
-							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-map-marker"></i></div>
+							<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-map-marker"></i></div>
 						</div>
 						<div class="media-body">
-							Université Gustave Eiffel <br />5 Boulevard Descates, 77420, Champs-sur-marne, FR
+							<p> Université Gustave Eiffel <br />5 Boulevard Descates, 77420, Champs-sur-marne, FR </p>
 						</div>
 					</div>
 				</div>
@@ -67,12 +78,18 @@ if (isset($_POST['contactadmin'])) {
 				<div class="col-lg-10 col-md-6">
 					<div class="media">
 						<div class="d-flex">
-							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-phone"></i></div>
+							<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-phone"></i></div>
 						</div>
 						<div class="media-body">
-							<a href="tel:+33649789816">0649789816</a>
-							<a href="tel:+33636115370">0636115370</a>
-							<a href="tel:+33749291613">0749291613</a>
+							<a href="tel:+33649789816">
+								<p>0649789816</p>
+							</a>
+							<a href="tel:+33636115370">
+								<p>0636115370</p>
+							</a>
+							<a href="tel:+33749291613">
+								<p>0749291613</p>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -82,31 +99,25 @@ if (isset($_POST['contactadmin'])) {
 				<div class="col-lg-10 col-md-6">
 					<div class="media">
 						<div class="d-flex">
-							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
+							<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-envelope"></i></a></div>
 						</div>
 						<div class="media-body">
-							<a href="mailto:busines@persuit.com">business@orange.com</a> <br>
-							<a href="mailto:support@persuit.com">support@orange.com</a>
+							<a href="mailto:busines@persuit.com">
+								<p>mouheb@etud.u-pem.fr</p>
+							</a>
+							<a href="mailto:busines@persuit.com">
+								<p>yhadjar@etud.u-pem.fr</p>
+							</a>
+							<a href="mailto:support@persuit.com">
+								<p>nbouhar@etud.u-pem.fr</p>
+							</a>
 						</div>
 					</div>
 				</div>
-				<hr>
-
-				<div class="col-lg-10 col-md-6">
-					<div class="media">
-						<div class="d-flex">
-							<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-facebook"></i></div>
-						</div>
-						<div class="media-body">
-							<a href="facebook.com">Suivez-nous sur facebook</a>
-						</div>
-					</div>
-				</div>
-
 			</div>
 		</div>
 
-		<div class="w-size8 p-t-30 p-l-15 p-r-15 respon3">
+		<div class="w-size8 p-t-25 p-l-15 p-r-15 respon3">
 			<h4 class="s-text12 p-b-30">
 				Nos solutions
 			</h4>
@@ -114,10 +125,12 @@ if (isset($_POST['contactadmin'])) {
 			<div class="col-lg-10 col-md-6">
 				<div class="media">
 					<div class="d-flex">
-						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-connectdevelop"></i></div>
+						<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-connectdevelop"></i></div>
 					</div>
 					<div class="media-body">
-						<a href="#">Internet des Objets</a>
+						<a href="#">
+							<p>Internet des Objets</p>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -125,10 +138,12 @@ if (isset($_POST['contactadmin'])) {
 			<div class="col-lg-10 col-md-6">
 				<div class="media">
 					<div class="d-flex">
-						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-cloud"></i></div>
+						<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-cloud"></i></div>
 					</div>
 					<div class="media-body">
-						<a href="#">Cloud</a>
+						<a href="#">
+							<p>Cloud</p>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -136,17 +151,19 @@ if (isset($_POST['contactadmin'])) {
 			<div class="col-lg-10 col-md-6">
 				<div class="media">
 					<div class="d-flex">
-						<div class="icon-box col-md-3 col-sm-4"><i class="fa fa-home"></i></div>
+						<div class="icon-box col-md-3 col-sm-4"><i class="myico fa fa-home"></i></div>
 					</div>
 					<div class="media-body">
-						<a href="#">Domotique</a>
+						<a href="#">
+							<p>Domotique</p>
+						</a>
 					</div>
 				</div>
 			</div>
 
 		</div>
 
-		<div id="cad" class="w-size8 p-t-30 p-l-15 p-r-15 respon3">
+		<div id="cad" class="w-size8 p-t-25 p-l-15 p-r-15 respon3">
 			<h4 class="s-text12 p-b-30">
 				Probleme technique ? <br>
 				Contactez l'administrateur !

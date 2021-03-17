@@ -76,13 +76,13 @@
 				<button type="button" class="btn btn-danger" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
 			</div>
 
-			<div class="row col-md-12" style="display:flex;justify-content:center;align-items:center">
+			<div class="row" style="display:flex;justify-content:center;align-items:center">
 				<div class="panel-heading col-xl-6 col-lg-12 col-md-12">
 					<div class="alert alert-primary" role="alert">
 						<h4 class="alert-heading">Informations sur le kit</h4>
 						<hr>
-						<div class="row col-12">
-							<div class="col col-md-6 col-sm-12 col-12" align="left">
+						<div class="row p-0 col-12">
+							<div class="col p-0 col-md-6 col-sm-12 col-12" align="left">
 								<h5> Général :</h5>
 								<p class="panel-subtitle" id="date"><b>Dérnière connexion :</b> </p>
 								<p class="panel-subtitle" id="idd"><b>ID : </b></p>
@@ -92,7 +92,7 @@
 								<p class="panel-subtitle" id="fsn"><b>Numéro de série : </b></p>
 								<p class="panel-subtitle" id="imei"><b>IMEI : </b></p>
 							</div>
-							<div class="col col-md-6 col-sm-12 col-12" align="left">
+							<div class="col p-0 col-md-6 col-sm-12 col-12" align="left">
 								<h5> Réseau :</h5>
 								<p><b>Rat. : </b><span class="panel-subtitle" id="rat"></span></p>
 								<p><b>Status : </b><span class="panel-subtitle" id="status"></span></p>
@@ -150,7 +150,7 @@
 									<div id="system-load" class="easy-pie-chart" data-percent="0"></div>
 								</span>
 								<p>
-									<span class="number" id="percent" style="background-color:white !important;">0%</span>
+									<span class="number" id="percent" style="background-color:white !important;">- %</span>
 									<span class="title">Batterie</span>
 								</p>
 								</p>
@@ -160,7 +160,7 @@
 							<div class="metric">
 								<img class="myicon" src="images/icons/centigrade.png" />
 								<p>
-									<span class="number" id="temperatureC">1,252 C°</span>
+									<span class="number" id="temperatureC">- C°</span>
 									<span class="title">Température</span>
 								</p>
 							</div>
@@ -169,7 +169,7 @@
 							<div class="metric">
 								<img class="myicon" src="images/icons/humidity.png" />
 								<p>
-									<span class="number" id="humidite">50.21 %</span>
+									<span class="number" id="humidite">- %</span>
 									<span class="title">Humidité</span>
 								</p>
 							</div>
@@ -178,8 +178,37 @@
 							<div class="metric">
 								<img class="myicon" src="images/icons/atmospheric.png" />
 								<p>
-									<span class="number" id="pression">1.01 Atm</span>
+									<span class="number" id="pression"> - mb</span>
 									<span class="title">Pression</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="metric">
+								<img class="myicon" src="images/icons/atmospheric.png" />
+								<p>
+									<span class="number" id="co2"> - mb</span>
+									<span class="title">CO2</span>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="metric">
+								<img class="myicon" src="images/icons/atmospheric.png" />
+								<p>
+									<span class="number" id="airqualite"> - mb</span>
+									<span class="title">iaq</span>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="metric">
+								<img class="myicon" src="images/icons/atmospheric.png" />
+								<p>
+									<span class="number" id="light"> - mb</span>
+									<span class="title">Lumière</span>
 								</p>
 							</div>
 						</div>
@@ -262,8 +291,8 @@
 			return (5 / 9) * (f - 32)
 		}
 
-		function convertPascaltoAtm(f) {
-			return f * 0.000009869
+		function convertPascal(f) {
+			return f * 0.01
 		}
 
 		function inverseTodo() {
@@ -310,9 +339,12 @@
 					document.getElementById("imei").innerHTML = "<b>IMEI : </b>" + getValues.hardware.imei;
 					document.getElementById("fsn").innerHTML = "<b>Numéro de série : </b>" + getValues.hardware.fsn;
 
-					document.getElementById("temperatureC").innerHTML = convertTempFtoC((getSummary["/imu/temp/value"].v)).toFixed(2) + " C°";
-					document.getElementById("pression").innerHTML = convertPascaltoAtm(JSON.parse(getSummary["/environment/value"].s).pressure).toFixed(2) + " Atm";
-					document.getElementById("humidite").innerHTML = JSON.parse(getSummary["/environment/value"].s).humidity.toFixed(2) + " %";
+					document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2) + " C°";
+					document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary["/environment/value"].v).pressure).toFixed(0) + " mb";
+					document.getElementById("humidite").innerHTML = JSON.parse(getSummary["/environment/value"].v).humidity.toFixed(2) + " %";
+					document.getElementById("co2").innerHTML = JSON.parse(getSummary["/environment/value"].v).co2EquivalentValue.toFixed(2) + " ";
+					document.getElementById("airqualite").innerHTML = JSON.parse(getSummary["/environment/value"].v).iaqValue.toFixed(2);
+					document.getElementById("light").innerHTML = (getSummary["/light/value"].v * 100).toFixed(2) + " %";
 					document.getElementById("redLED").innerHTML = getSummary["/leds/tri/red/enable"].v;
 					document.getElementById("greenLED").innerHTML = getSummary["/leds/tri/green/enable"].v;
 					document.getElementById("blueLED").innerHTML = getSummary["/leds/tri/blue/enable"].v;
@@ -332,13 +364,13 @@
 
 					try {
 						if (tempValues.series[0].length < 17) {
-							tempValues.series[0].push(convertTempFtoC(getSummary["/imu/temp/value"].v).toFixed(2));
-							tempValues.labels.push(new Date(getSummary["/imu/temp/value"].ts).toLocaleTimeString());
+							tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2));
+							tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
 						} else {
 							tempValues.series[0].splice(0, 1);
 							tempValues.labels.splice(0, 1);
-							tempValues.series[0].push(convertTempFtoC(getSummary["/imu/temp/value"].v).toFixed(2));
-							tempValues.labels.push(new Date(getSummary["/imu/temp/value"].ts).toLocaleTimeString());
+							tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2));
+							tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
 						}
 					} catch (error) {
 						//console.log(error);
