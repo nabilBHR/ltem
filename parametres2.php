@@ -41,11 +41,11 @@
 </head>
 
 <body class="animsition">
-	<?php require "header2.php"; ?>
+	<?php require "header3.php"; ?>
 	<div class="card bg-light m-t-80">
 		<img class="fit-picture" src="images/page-under-construction.jpg" alt="Page under construction">
 	</div>
-	<?php require "footer.php" ?>
+
 
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="libs/vendor/jquery/jquery-3.2.1.min.js"></script>

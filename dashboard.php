@@ -66,7 +66,7 @@
 
 <body class="animsition">
 	<?php require "header2.php"; ?>
-	<div class="main-content">
+	<div class="main-content m-t-80">
 		<div align="center" class="container-fluid">
 			<!-- OVERVIEW -->
 			<h1 style="font-size:30px" class="panel-title">Dashboard</h1>
@@ -187,27 +187,27 @@
 					<div class="row">
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/air-quality.png" />
 								<p>
-									<span class="number" id="co2"> - mb</span>
+									<span class="number" id="co2"> - </span>
 									<span class="title">CO2</span>
 								</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/breath.png" />
 								<p>
-									<span class="number" id="airqualite"> - mb</span>
+									<span class="number" id="airqualite"> - </span>
 									<span class="title">iaq</span>
 								</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="metric">
-								<img class="myicon" src="images/icons/atmospheric.png" />
+								<img class="myicon" src="images/icons/sunlight.png" />
 								<p>
-									<span class="number" id="light"> - mb</span>
+									<span class="number" id="light"> - %</span>
 									<span class="title">Lumière</span>
 								</p>
 							</div>

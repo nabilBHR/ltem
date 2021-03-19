@@ -99,7 +99,7 @@
 	}
 	?>
 
-	<div class="card bg-light ">
+	<div class="card bg-light m-t-80">
 		<div align="center" class="card-header">Ajout d'un nouveau kit</div>
 		<div class="card-body">
 			<!-- formulaire connexion-->
@@ -205,8 +205,8 @@
 			remplireForme();
 		},
 		error: function(request, textStatus, errorThrown) {
-			alert(request.getResponseHeader('some_header'));
-			console.log("error");
+			alert("Erreur d'authetification sur Octave ! Veuillez raffraichir la page et si ca persiste contacter l'admin.");
+			console.log("Erreur d'authetification sur Octave");
 		}
 	})
 
@@ -215,14 +215,16 @@
 			element.hardware.imei === selectIMEIs.options[selectIMEIs.selectedIndex].innerHTML
 		);
 		document.getElementById("fsn").value = data.hardware.fsn;
+		document.getElementById("fsn").setAttribute('readonly', true);
 		document.getElementById("moduleName").value = data.name;
+		document.getElementById("moduleName").setAttribute('readonly', true);
 		var module = document.getElementById("module");
 		if (data.hardware.module != undefined) {
 			module.value = data.hardware.module;
-			//module.disabled = true;
+			module.setAttribute('readonly', true);
 		} else {
 			module.value = "";
-			module.disabled = false;
+			module.removeAttribute('readonly');
 		}
 	}
 </script>

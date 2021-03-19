@@ -1,15 +1,13 @@
 <?php
 
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "ltem_db";
-	
-	// Create connection
-	$bdd = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
-	if ($bdd->connect_error) {
-		die("Connection failed: " . $bdd->connect_error);
-	}
-	
-?> 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "ltem_db";
+
+// Create connection
+$bdd = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($bdd->connect_error) {
+	die("Connection failed: " . $bdd->connect_error);
+}
