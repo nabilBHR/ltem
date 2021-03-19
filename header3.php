@@ -24,29 +24,10 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
 ?>
 
 <!-- Header -->
-<header class="header1">
+<header class="header1 fixed-top">
 
   <!-- Header desktop -->
-  <div class="container-menu-header">
-
-    <div class="topbar">
-      <table>
-        <tr>
-          <th class="col-lg-12 col-md-6">
-            <div class="col-lg-12 col-md-6">
-              <div class="media">
-                <div class="d-flex">
-                  <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
-                </div>
-                <div class="media-body">
-                  Mettre un truc ici ...
-                </div>
-              </div>
-            </div>
-          </th>
-        </tr>
-      </table>
-    </div>
+  <div>
 
     <div style="background-color:#FF7900  ;" class="wrap_header">
       <!-- Logo -->
@@ -96,7 +77,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
   </div>
 
   <!-- Header Mobile -->
-  <div class="wrap_header_mobile" style="background-color:#FF7900  ;">
+  <div class="wrap_header_mobile col-12 fixed-top" style="background-color:#FF7900  ;">
     <!-- Logo moblie -->
     <a href="#" class="logo-mobile">
       <img src="images/icons/logo.png" alt="IMG-LOGO">

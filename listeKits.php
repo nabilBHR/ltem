@@ -192,7 +192,7 @@
 					dataOctave = (data.body).find(element => {
 						return element.hardware.imei === imei;
 					});
-					if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced == true) {
+					if ((dataOctave.timeSinceLastSeen / 1000) <= 60 && dataOctave.synced == true) {
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = "Oui";
 					} else {

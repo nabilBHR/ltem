@@ -40,15 +40,7 @@
 
 	<?php
 	require "header3.php";
-	$idmess = $_GET['id'];
-	if ($idmess !== NULL) {
-		$cpt = 1;
-		$bdd4 = new mysqli($servername, $username, $password, $dbname);
-		$stmt4 = mysqli_prepare($bdd4, 'DELETE FROM message WHERE id = ? LIMIT 1');
-		mysqli_stmt_bind_param($stmt4, "i", $idmess);
-		mysqli_stmt_execute($stmt4);
-		mysqli_close($bdd4);
-	}
+
 	?>
 
 	<div class="card text-center">
@@ -59,9 +51,19 @@
 
 			<?php
 
+			if (isset($_GET['id'])) {
+				$idmess = $_GET['id'];
+				$cpt = 1;
+				$bdd4 = new mysqli($servername, $username, $password, $dbname);
+				$stmt4 = mysqli_prepare($bdd4, 'DELETE FROM message WHERE id = ? LIMIT 1');
+				mysqli_stmt_bind_param($stmt4, "i", $idmess);
+				mysqli_stmt_execute($stmt4);
+				mysqli_close($bdd4);
+			}
+
 			$articlesParPage = 5;
 
-			$stmt2 = mysqli_query($bdd, 'SELECT  id  FROM message ');
+			$stmt2 = mysqli_query($bdd, 'SELECT  id  FROM message');
 			mysqli_stmt_execute($stmt2);
 			$articlesTotal = mysqli_num_rows($stmt2);
 
