@@ -99,7 +99,7 @@
 	}
 	?>
 
-	<div class="card bg-light ">
+	<div class="card bg-light m-t-80">
 		<div align="center" class="card-header">Ajout d'un nouveau kit</div>
 		<div class="card-body">
 			<!-- formulaire connexion-->
@@ -205,8 +205,8 @@
 			remplireForme();
 		},
 		error: function(request, textStatus, errorThrown) {
-			alert(request.getResponseHeader('some_header'));
-			console.log("error");
+			alert("Erreur d'authetification sur Octave ! Veuillez raffraichir la page et si ca persiste contacter l'admin.");
+			console.log("Erreur d'authetification sur Octave");
 		}
 	})
 
