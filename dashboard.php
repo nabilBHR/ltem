@@ -66,6 +66,20 @@
 
 <body class="animsition">
 	<?php require "header2.php"; ?>
+	<?php 
+        if(isset($_POST['myInfo']) && ($_POST['myInfo']!="")){
+            $file = 'myKitData.json';
+            $current = file_get_contents($file);
+            if($current==null){
+                file_put_contents($file, "[]");
+                $current = file_get_contents($file);
+            }
+            $tempArray = json_decode($current);
+            array_push($tempArray ,json_decode($_POST['myInfo']));
+            $jsonData = json_encode($tempArray);
+            file_put_contents($file, $jsonData);
+        }
+    ?>
 	<div class="main-content m-t-80">
 		<div align="center" class="container-fluid">
 			<!-- OVERVIEW -->
@@ -139,7 +153,10 @@
 					</div>
 				</div>
 			</div>
-
+			<form action="<?=$_SERVER['dashboard'];?>" method="post" id="myForm" name="myForm">
+				<input type="text" name="temp" id="temp"/>
+				<input type="submit" id="trans">
+        	</form>
 			<div class="panel panel-headline">
 				<br>
 				<div class="panel-body">
@@ -312,11 +329,12 @@
 				}, delayInms);
 			});
 		}
-
+		
+		var companyName = "universit_gustave_eiffel";
+		var dID = "d6048d14e337dab5dbbb15059";
+		
 		async function octaveCall(todo) {
 			document.getElementById("buttonOctave").disabled = true;
-			var companyName = "universit_gustave_eiffel";
-			var dID = "d6048d14e337dab5dbbb15059";
 			var getValues = {};
 
 			$.ajax({
@@ -339,7 +357,7 @@
 					document.getElementById("imei").innerHTML = "<b>IMEI : </b>" + getValues.hardware.imei;
 					document.getElementById("fsn").innerHTML = "<b>Numéro de série : </b>" + getValues.hardware.fsn;
 
-					console.log(getSummary)
+					// console.log(getSummary)
 					document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2) + " C°";
 					document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary["/environment/value"].v).pressure).toFixed(0) + " mb";
 					document.getElementById("humidite").innerHTML = JSON.parse(getSummary["/environment/value"].v).humidity.toFixed(2) + " %";
@@ -357,11 +375,13 @@
 					document.getElementById("firmware").innerHTML = getValues.localVersions.firmware;
 					document.getElementById("version").innerHTML = getValues.localVersions.edge;
 
-					let dateMajLed = new Date(getSummary["/leds/tri/red/enable"].ts)
-
-					document.getElementById("redLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
-					document.getElementById("greenLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
-					document.getElementById("blueLEDTime").innerHTML = dateMajLed.toLocaleDateString("fr-FR") + " - " + dateMajLed.toLocaleTimeString();
+					let dateMajLedR = new Date(getSummary["/leds/tri/red/enable"].ts)
+					let dateMajLedG = new Date(getSummary["/leds/tri/green/enable"].ts)
+					let dateMajLedB = new Date(getSummary["/leds/tri/blue/enable"].ts)
+					
+					document.getElementById("redLEDTime").innerHTML = dateMajLedR.toLocaleDateString("fr-FR") + " - " + dateMajLedR.toLocaleTimeString();
+					document.getElementById("greenLEDTime").innerHTML = dateMajLedG.toLocaleDateString("fr-FR") + " - " + dateMajLedG.toLocaleTimeString();
+					document.getElementById("blueLEDTime").innerHTML = dateMajLedB.toLocaleDateString("fr-FR") + " - " + dateMajLedB.toLocaleTimeString();
 
 					try {
 						if (tempValues.series[0].length < 17) {
@@ -384,6 +404,70 @@
 			})
 			let delayRes = await delay(1000);
 		}
+
+		dataDashboard()
+		async function dataDashboard(){
+			document.getElementById("buttonOctave").disabled = true;
+			var getValues = {};
+
+			$.ajax({
+				url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/" + dID,
+				headers: {
+					'X-Auth-User': 'yacine_hadjar',
+					'X-Auth-Token': 'shAixQsXspB5bJ6LpKBCD6myetVX86po',
+				},
+				type: "GET",
+				cache: false,
+				success: function(data, textStatus, request) {
+					console.log("writing data ...")
+					summary = data.body.summary;
+
+					let myHistory = {
+						"date": new Date(),
+						"temperature": JSON.parse(summary["/environment/value"].v).temperature.toFixed(2),
+						"pression": convertPascal(JSON.parse(summary["/environment/value"].v).pressure).toFixed(0),
+						"lumiere": (summary["/light/value"].v * 100).toFixed(2),
+						"iaq":JSON.parse(summary["/environment/value"].v).iaqValue.toFixed(2)
+					};
+		
+					exportData(myHistory)
+					$("#trans").click();
+
+				},
+				error: function(request, textStatus, errorThrown) {
+					alert(request.getResponseHeader('some_header'));
+					console.log("error");
+				}
+			})
+			let delayRes = await delayDataDashboard(10000);
+		}		
+
+		function delayDataDashboard(delayInms) {
+			return new Promise(resolve => {
+				setTimeout(() => {
+					dataDashboard();
+				}, delayInms);
+			});
+		}
+
+		function exportData(x){
+			console.log(x);
+			let content=JSON.stringify(x);
+			document.getElementById("temp").value = content;
+			submitData();
+		}
+
+		function submitData(){
+			$('#myForm').submit(function(e){
+				e.preventDefault();
+				$.ajax({
+					type: 'post',
+					data:  {myInfo : document.getElementById("temp").value},
+				});
+			});
+			// window.history.replaceState( null, null, window.location.href );
+		}
+
 	</script>
 
 </body>

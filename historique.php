@@ -48,6 +48,14 @@
     <style>
     .ct-series-a .ct-bar {
         stroke-width: 50px;
+        background-color :red;
+    }
+    .myicon {
+        float: left;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
     }
     </style>
 </head>
@@ -69,12 +77,52 @@
         }
     ?>
     <div>
-        <div class="buttons d-flex justify-content-center" style="margin:1.5em">
+        <div class="buttons d-flex justify-content-center p-t-80" style="margin:1.5em">
             <button type="button" class="btn btn-success m-r-7" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i
                     class="fa fa-play" aria-hidden="true"></i> Capture</button>
             <button type="button" class="btn btn-danger m-l-7" onclick="inverseTodo()"><i class="fa fa-stop"
                     aria-hidden="true"></i> Arrêter</button>
         </div>
+
+        <div class="row mt-4 col-12 d-flex justify-content-center m-0 p-0">
+            <div class="col-md-3">
+                <div class="metric bg-white">
+                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <p>
+                        <span class="number" id="temp"> - °C</span>
+                        <span class="title">Température moyenne</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric bg-white">
+                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <p>
+                        <span class="number" id="pressur"> - mb</span>
+                        <span class="title">Préssion moyenne</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric bg-white">
+                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <p>
+                        <span class="number" id="light"> - %</span>
+                        <span class="title">Lumière moyenne</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric bg-white">
+                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <p>
+                        <span class="number" id="iaq"> - </span>
+                        <span class="title">iaq moyen</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
 
         <div class="row col-12 d-flex justify-content-center m-0 p-0">
             <div class="col col-12 col-md-11 p-0">
@@ -97,10 +145,9 @@
                 </div>
             </div>
         </div>
-        <form action="<?=$_SERVER['historique'];?>" method="post" id="myForm" name="myForm">
+        <form action="<?=$_SERVER['historique'];?>" method="post" id="myForm" name="myForm" hidden>
             <input type="text" name="temp" id="temp"/>
-            <input type="submit" value="send" id="trans" name="transfer">
-            <textarea name="rep" id="rep" cols="30" rows="10"></textarea>
+            <input type="submit" id="trans">
         </form>
     </div>
     <?php require "footer.php" ?>
@@ -126,16 +173,84 @@ var todo = false;
 
 // headline charts
 var tempValues = {
-    labels: ["sam", "dim", "lun", "mar", "mer", "jeu", "ven"],
+    labels: ["temperature", "pression", "lumiere", "iaq"],
     series: [
-        [average([10,5,15]), 8, 9, 10, 9, 11, 10],
+        []
     ]
 };
 
+new Chartist.Bar('#headline-chart', tempValues, optionsBarChart);
+new Chartist.Bar('#headline-chart-2', tempValues, optionsBarChart);
+var todo = false;
+
+var companyName = "universit_gustave_eiffel";
+var dID = "d6048d14e337dab5dbbb15059";
+
+Dashboard()
+async function Dashboard(){
+    document.getElementById("buttonOctave").disabled = true;
+    var getValues = {};
+
+    $.ajax({
+        url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/" + dID,
+        headers: {
+            'X-Auth-User': 'yacine_hadjar',
+            'X-Auth-Token': 'shAixQsXspB5bJ6LpKBCD6myetVX86po',
+        },
+        type: "GET",
+        cache: false,
+        success: function(data, textStatus, request) {
+            
+            $.getJSON("myKitData.json", function (json) {
+                document.getElementById("temp").innerHTML = (json.map(e=>e.temperature).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" °C"
+                document.getElementById("pressur").innerHTML = (json.map(e=>e.pression).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" mb"
+                document.getElementById("light").innerHTML = (json.map(e=>e.lumiere).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" %"
+                document.getElementById("iaq").innerHTML = (json.map(e=>e.iaq).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)
+                
+                // summary = data.body.summary;
+
+                //     let myHistory = {
+                //         "date": new Date(),
+                //         "temperature": JSON.parse(summary["/environment/value"].v).temperature.toFixed(2),
+                //         "pression": convertPascal(JSON.parse(summary["/environment/value"].v).pressure).toFixed(0),
+                //         "lumiere": (summary["/light/value"].v * 100).toFixed(2),
+                //         "iaq":JSON.parse(summary["/environment/value"].v).iaqValue.toFixed(2)
+                //     };
+
+                //     exportData(myHistory)
+                //     $("#trans").click();
+                // },
+                // error: function(request, textStatus, errorThrown) {
+                //     alert(request.getResponseHeader('some_header'));
+                //     console.log("error");
+                // }
+
+                // tempValues.series[0].splice(0, 4);
+                // tempValues.series[0].push(temperature)
+                // tempValues.series[0].push(pression)
+                // tempValues.series[0].push(lumiere)
+                // tempValues.series[0].push(iaq)
+            })
+            console.log(tempValues)
+        }
+    })
+    // let delayRes = await delayDataDashboard(1000);
+}		
+
+function delayDataDashboard(delayInms) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            Dashboard();
+            new Chartist.Bar('#headline-chart', tempValues, optionsTempChart);
+        }, delayInms);
+    });
+}
+
 function exportData(x){
-    var content=JSON.stringify(x)
+    console.log(x);
+    let content=JSON.stringify(x);
     document.getElementById("temp").value = content;
-    submitData()
+    submitData();
 }
 
 function submitData(){
@@ -144,21 +259,14 @@ function submitData(){
         $.ajax({
             type: 'post',
             data:  {myInfo : document.getElementById("temp").value},
-            success: function(){
-                console.log("hello:");
-                document.getElementById("rep").value = "data";
-            }
         });
     });
-    window.history.replaceState( null, null, window.location.href );
+    // window.history.replaceState( null, null, window.location.href );
 }
 
-function average(nums) {
-    return nums.reduce((a, b) => (a + b)) / nums.length;
-}
-
-exportData(tempValues)
-$("#trans").click();
+// function average(nums) {
+//     return nums.reduce((a, b) => (a + b)) / nums.length;
+// }
 
 var optionsTempChart = {
     height: 300,
@@ -183,84 +291,80 @@ var optionsBarChart = {
     height: 300,
 }
 
-new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
-new Chartist.Bar('#headline-chart-2', tempValues, optionsBarChart);
-var todo = false;
-
 function inverseTodo() {
     document.getElementById("buttonOctave").disabled = false;
     return todo = !todo;
 }
 
-function delay(delayInms) {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            if (todo) {
-                octaveCall(todo);
-                new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
-            }
-        }, delayInms);
-    });
-}
+// function delay(delayInms) {
+//     return new Promise(resolve => {
+//         setTimeout(() => {
+//             if (todo) {
+//                 octaveCall(todo);
+//                 new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
+//             }
+//         }, delayInms);
+//     });
+// }
 
-async function octaveCall(todo) {
-    document.getElementById("buttonOctave").disabled = true;
-    var companyName = "universit_gustave_eiffel";
-    var dID = "d6048d14e337dab5dbbb15059";
-    var getValues = {};
+// async function octaveCall(todo) {
+//     document.getElementById("buttonOctave").disabled = true;
+//     var companyName = "universit_gustave_eiffel";
+//     var dID = "d6048d14e337dab5dbbb15059";
+//     var getValues = {};
 
-    $.ajax({
-        url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/" + dID,
-        headers: {
-            'X-Auth-User': 'yacine_hadjar',
-            'X-Auth-Token': 'shAixQsXspB5bJ6LpKBCD6myetVX86po',
-        },
-        type: "GET",
-        cache: false,
-        success: function(data, textStatus, request) {
+//     $.ajax({
+//         url: "https://octave-api.sierrawireless.io/v5.0/" + companyName + "/device/" + dID,
+//         headers: {
+//             'X-Auth-User': 'yacine_hadjar',
+//             'X-Auth-Token': 'shAixQsXspB5bJ6LpKBCD6myetVX86po',
+//         },
+//         type: "GET",
+//         cache: false,
+//         success: function(data, textStatus, request) {
 
-            getValues = data.body;
-            getSummary = getValues.summary;
+//             getValues = data.body;
+//             getSummary = getValues.summary;
 
-            document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary[
-                "/environment/value"].v).temperature.toFixed(2) + " C°";
-            document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary[
-                "/environment/value"].v).pressure).toFixed(0) + " mb";
-            document.getElementById("humidite").innerHTML = JSON.parse(getSummary[
-                "/environment/value"].v).humidity.toFixed(2) + " %";
-            document.getElementById("co2").innerHTML = JSON.parse(getSummary["/environment/value"]
-                .v).co2EquivalentValue.toFixed(2) + " ";
-            document.getElementById("airqualite").innerHTML = JSON.parse(getSummary[
-                "/environment/value"].v).iaqValue.toFixed(2);
-            document.getElementById("light").innerHTML = (getSummary["/light/value"].v * 100)
-                .toFixed(2) + " %";
+//             document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary[
+//                 "/environment/value"].v).temperature.toFixed(2) + " C°";
+//             document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary[
+//                 "/environment/value"].v).pressure).toFixed(0) + " mb";
+//             document.getElementById("humidite").innerHTML = JSON.parse(getSummary[
+//                 "/environment/value"].v).humidity.toFixed(2) + " %";
+//             document.getElementById("co2").innerHTML = JSON.parse(getSummary["/environment/value"]
+//                 .v).co2EquivalentValue.toFixed(2) + " ";
+//             document.getElementById("airqualite").innerHTML = JSON.parse(getSummary[
+//                 "/environment/value"].v).iaqValue.toFixed(2);
+//             document.getElementById("light").innerHTML = (getSummary["/light/value"].v * 100)
+//                 .toFixed(2) + " %";
 
-            try {
-                if (tempValues.series[0].length < 17) {
-                    tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v)
-                        .temperature.toFixed(2));
-                    tempValues.labels.push(new Date(getSummary["/environment/value"].ts)
-                        .toLocaleTimeString());
-                } else {
-                    tempValues.series[0].splice(0, 1);
-                    tempValues.labels.splice(0, 1);
-                    tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v)
-                        .temperature.toFixed(2));
-                    tempValues.labels.push(new Date(getSummary["/environment/value"].ts)
-                        .toLocaleTimeString());
-                }
-                console.log(tempValues);
-            } catch (error) {
-                //console.log(error);
-            }
-        },
-        error: function(request, textStatus, errorThrown) {
-            alert(request.getResponseHeader('some_header'));
-            console.log("error");
-        }
-    })
-    let delayRes = await delay(1000);
-}
+//             try {
+//                 if (tempValues.series[0].length < 17) {
+//                     tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v)
+//                         .temperature.toFixed(2));
+//                     tempValues.labels.push(new Date(getSummary["/environment/value"].ts)
+//                         .toLocaleTimeString());
+//                 } else {
+//                     tempValues.series[0].splice(0, 1);
+//                     tempValues.labels.splice(0, 1);
+//                     tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v)
+//                         .temperature.toFixed(2));
+//                     tempValues.labels.push(new Date(getSummary["/environment/value"].ts)
+//                         .toLocaleTimeString());
+//                 }
+//                 console.log(tempValues);
+//             } catch (error) {
+//                 //console.log(error);
+//             }
+//         },
+//         error: function(request, textStatus, errorThrown) {
+//             alert(request.getResponseHeader('some_header'));
+//             console.log("error");
+//         }
+//     })
+//     let delayRes = await delay(1000);
+// }
 </script>
 
 </html>
