@@ -45,7 +45,7 @@
 	<?php require "header1.php"; ?>
 
 	<!-- Slide1 -->
-	<section class="slide1">
+	<section class="slide1 m-t-85">
 		<div class="wrap-slick1">
 			<div class="slick1">
 

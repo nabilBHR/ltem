@@ -42,7 +42,7 @@
 	require "header2.php"
 	?>
 
-	<div class="card text-center m-t-80">
+	<div class="card text-center m-t-85">
 		<div class="card-header">
 			Mes kits
 		</div>
@@ -192,9 +192,11 @@
 					dataOctave = (data.body).find(element => {
 						return element.hardware.imei === imei;
 					});
-					if ((dataOctave.timeSinceLastSeen / 1000) <= 60 && dataOctave.synced == true) {
+					console.log(dataOctave.timeSinceLastSeen / 1000);
+					if ((dataOctave.timeSinceLastSeen / 1000) < 60 && dataOctave.synced == true) {
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = "Oui";
+						document.getElementById("but" + imei).disabled = false;
 					} else {
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = 'Non';

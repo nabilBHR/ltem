@@ -46,7 +46,7 @@ if ($_SERVER['HTTP_REFERER'] !== NULL) {
 	<body class="animsition">
 		<?php require "header1.php"; ?>
 
-		<div class="card bg-light m-t-80 ">
+		<div class="card bg-light m-t-85">
 			<div align="center" class="card-header">Inscription réussie ! </div>
 			<div class="card-body">
 				<DIV ALIGN="CENTER">

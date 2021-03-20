@@ -66,7 +66,7 @@
 
 <body class="animsition">
 	<?php require "header2.php"; ?>
-	<div class="main-content m-t-80">
+	<div class="main-content m-t-85">
 		<div align="center" class="container-fluid">
 			<!-- OVERVIEW -->
 			<h1 style="font-size:30px" class="panel-title">Dashboard</h1>
