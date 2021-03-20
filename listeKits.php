@@ -192,10 +192,17 @@
 					dataOctave = (data.body).find(element => {
 						return element.hardware.imei === imei;
 					});
-					if ((dataOctave.timeSinceLastSeen / 1000) <= 60 && dataOctave.synced == true) {
-						document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
-						document.getElementById("sync" + imei).innerHTML = "Oui";
-					} else {
+					if (dataOctave.hardware.module != undefined) {
+						if ((dataOctave.timeSinceLastSeen / 1000) <= 60){	
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
+							document.getElementById("sync" + imei).innerHTML = "Oui";
+							document.getElementById("but" + imei).disabled = false;
+						} else {
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
+							document.getElementById("sync" + imei).innerHTML = "Oui";
+							document.getElementById("but" + imei).disabled = true;
+						}
+					}else{
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = 'Non';
 						document.getElementById("but" + imei).disabled = true;

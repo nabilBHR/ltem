@@ -54,6 +54,20 @@
 
 <body class="animsition">
     <?php require "header2.php"; ?>
+    <?php 
+        if(isset($_POST['myInfo']) && ($_POST['myInfo']!="")){
+            $file = 'myKitData.json';
+            $current = file_get_contents($file);
+            if($current==null){
+                file_put_contents($file, "[]");
+                $current = file_get_contents($file);
+            }
+            $tempArray = json_decode($current);
+            array_push($tempArray ,json_decode($_POST['myInfo']));
+            $jsonData = json_encode($tempArray);
+            file_put_contents($file, $jsonData);
+        }
+    ?>
     <div>
         <div class="buttons d-flex justify-content-center" style="margin:1.5em">
             <button type="button" class="btn btn-success m-r-7" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i
@@ -83,7 +97,11 @@
                 </div>
             </div>
         </div>
-
+        <form action="<?=$_SERVER['historique'];?>" method="post" id="myForm" name="myForm">
+            <input type="text" name="temp" id="temp"/>
+            <input type="submit" value="send" id="trans" name="transfer">
+            <textarea name="rep" id="rep" cols="30" rows="10"></textarea>
+        </form>
     </div>
     <?php require "footer.php" ?>
 
@@ -108,11 +126,39 @@ var todo = false;
 
 // headline charts
 var tempValues = {
-    labels: [10, 20, 10, 15, 50, 30, 20, 0],
+    labels: ["sam", "dim", "lun", "mar", "mer", "jeu", "ven"],
     series: [
-        [0, 0, 0, 10, 20, 40, 0, 0],
+        [average([10,5,15]), 8, 9, 10, 9, 11, 10],
     ]
 };
+
+function exportData(x){
+    var content=JSON.stringify(x)
+    document.getElementById("temp").value = content;
+    submitData()
+}
+
+function submitData(){
+    $('#myForm').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            data:  {myInfo : document.getElementById("temp").value},
+            success: function(){
+                console.log("hello:");
+                document.getElementById("rep").value = "data";
+            }
+        });
+    });
+    window.history.replaceState( null, null, window.location.href );
+}
+
+function average(nums) {
+    return nums.reduce((a, b) => (a + b)) / nums.length;
+}
+
+exportData(tempValues)
+$("#trans").click();
 
 var optionsTempChart = {
     height: 300,
