@@ -87,7 +87,7 @@
         <div class="row mt-4 col-12 d-flex justify-content-center m-0 p-0">
             <div class="col-md-3">
                 <div class="metric bg-white">
-                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <img class="myicon" src="images/icons/centigrade.png" />
                     <p>
                         <span class="number" id="temp"> - °C</span>
                         <span class="title">Température moyenne</span>
@@ -96,7 +96,7 @@
             </div>
             <div class="col-md-3">
                 <div class="metric bg-white">
-                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <img class="myicon" src="images/icons/atmospheric.png" />
                     <p>
                         <span class="number" id="pressur"> - mb</span>
                         <span class="title">Préssion moyenne</span>
@@ -114,7 +114,7 @@
             </div>
             <div class="col-md-3">
                 <div class="metric bg-white">
-                    <img class="myicon" src="images/icons/sunlight.png" />
+                    <img class="myicon" src="images/icons/breath.png" />
                     <p>
                         <span class="number" id="iaq"> - </span>
                         <span class="title">iaq moyen</span>
@@ -137,10 +137,30 @@
 
             <div class="col col-12 col-md-11 p-0">
                 <div class="alert alert-light border border-secondary p-0">
-                    <h4 class="alert-heading m-t-15 m-b-15 text-center">Historique temperature</h4>
+                    <h4 class="alert-heading m-t-15 m-b-15 text-center">Historique Préssion</h4>
+                    <hr />
+                    <div class="alert-body">
+                        <div id="headline-chart-1" class="ct-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-12 col-md-11 p-0">
+                <div class="alert alert-light border border-secondary p-0">
+                    <h4 class="alert-heading m-t-15 m-b-15 text-center">Historique Lumière</h4>
                     <hr />
                     <div class="alert-body">
                         <div id="headline-chart-2" class="ct-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-12 col-md-11 p-0">
+                <div class="alert alert-light border border-secondary p-0">
+                    <h4 class="alert-heading m-t-15 m-b-15 text-center">Historique iAQ</h4>
+                    <hr />
+                    <div class="alert-body">
+                        <div id="headline-chart-3" class="ct-chart"></div>
                     </div>
                 </div>
             </div>
@@ -168,19 +188,43 @@
 
 </body>
 <script>
-var battery;
 var todo = false;
 
 // headline charts
-var tempValues = {
-    labels: ["temperature", "pression", "lumiere", "iaq"],
+let tempValues = {
+    // labels: ["temperature"],
+    series: [
+        []
+    ]
+};
+let pressValues = {
+    // labels: ["pression"],
+    series: [
+        []
+    ]
+};
+let lumValues = {
+    // labels: ["lumiere"],
+    series: [
+        []
+    ]
+};
+let iaqValues = {
+    // labels: ["iaq"],
     series: [
         []
     ]
 };
 
-new Chartist.Bar('#headline-chart', tempValues, optionsBarChart);
-new Chartist.Bar('#headline-chart-2', tempValues, optionsBarChart);
+
+
+
+
+new Chartist.Line('#headline-chart', tempValues, optionsChart);
+new Chartist.Line('#headline-chart-1', tempValues, optionsChart);
+new Chartist.Line('#headline-chart-2', tempValues, optionsChart);
+new Chartist.Line('#headline-chart-3', tempValues, optionsChart);
+// new Chartist.Bar('#headline-chart-2', tempValues, optionsBarChart);
 var todo = false;
 
 var companyName = "universit_gustave_eiffel";
@@ -202,11 +246,13 @@ async function Dashboard(){
         success: function(data, textStatus, request) {
             
             $.getJSON("myKitData.json", function (json) {
-                document.getElementById("temp").innerHTML = (json.map(e=>e.temperature).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" °C"
-                document.getElementById("pressur").innerHTML = (json.map(e=>e.pression).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" mb"
-                document.getElementById("light").innerHTML = (json.map(e=>e.lumiere).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" %"
-                document.getElementById("iaq").innerHTML = (json.map(e=>e.iaq).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)
+                document.getElementById("temp").innerHTML = (json.map(e=>(tempValues.series[0].push(e.temperature),e.temperature)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" °C"
+                document.getElementById("pressur").innerHTML = (json.map(e=>(pressValues.series[0].push(e.pression),e.pression)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" mb"
+                document.getElementById("light").innerHTML = (json.map(e=>(lumValues.series[0].push(e.lumiere),e.lumiere)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" %"
+                document.getElementById("iaq").innerHTML = (json.map(e=>(iaqValues.series[0].push(e.iaq),e.iaq)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)
                 
+                // console.log(json.map(e=>(tempValues.series[0].push(e.temperature),e.temperature)))
+                // console.log(json.map(e=>{tempValues.series[0].push(e.temperature);return e.temperature}))
                 // summary = data.body.summary;
 
                 //     let myHistory = {
@@ -231,7 +277,11 @@ async function Dashboard(){
                 // tempValues.series[0].push(lumiere)
                 // tempValues.series[0].push(iaq)
             })
-            console.log(tempValues)
+            // console.log("tempV : ",tempValues.series[0])
+            new Chartist.Line('#headline-chart', tempValues, optionsChart);
+            new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
+            new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
+            new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
         }
     })
     // let delayRes = await delayDataDashboard(1000);
@@ -241,7 +291,10 @@ function delayDataDashboard(delayInms) {
     return new Promise(resolve => {
         setTimeout(() => {
             Dashboard();
-            new Chartist.Bar('#headline-chart', tempValues, optionsTempChart);
+            new Chartist.Line('#headline-chart', tempValues, optionsChart);
+            new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
+            new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
+            new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
         }, delayInms);
     });
 }
@@ -268,19 +321,19 @@ function submitData(){
 //     return nums.reduce((a, b) => (a + b)) / nums.length;
 // }
 
-var optionsTempChart = {
+var optionsChart = {
     height: 300,
     showLine: true,
-    showPoint: true,
+    showPoint: false,
     fullWidth: true,
     axisX: {
-        showGrid: true
+        showGrid: false
     },
     axisY: {
-        showGrid: true
+        showGrid: false
     },
     lineSmooth: true,
-    showArea: true,
+    showArea: false,
     chartPadding: {
         left: 20,
         right: 20
