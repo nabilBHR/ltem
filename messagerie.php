@@ -43,7 +43,7 @@
 
 	?>
 
-	<div class="card text-center m-t-80">
+	<div class="card text-center m-t-85">
 		<div class="card-header">
 			Messagerie
 		</div>
