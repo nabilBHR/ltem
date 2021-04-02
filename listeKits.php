@@ -46,7 +46,7 @@
 		<div class="card-header">
 			Mes kits
 		</div>
-		<div class="card-body">
+		<div class="card-body mt-5">
 			<a href="ajouterKit.php" type="submit" name="btnAddCt" class="btn btn-dark bo-rad-23"><i class="fa fa-plus" aria-hidden="true"></i>
 				Ajouter un kit
 			</a>
