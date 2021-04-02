@@ -42,7 +42,7 @@
 	require "header2.php"
 	?>
 
-	<div class="card text-center m-t-80">
+	<div class="card text-center">
 		<div class="card-header">
 			Mes kits
 		</div>
