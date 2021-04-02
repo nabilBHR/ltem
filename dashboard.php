@@ -87,7 +87,7 @@
 
 			<div class="buttons" style="margin:.5em">
 				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
-				<button type="button" class="btn btn-danger" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
+				<button type="button" class="btn btn-danger" id="buttonStop" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
 			</div>
 
 			<div class="row" style="display:flex;justify-content:center;align-items:center">
@@ -153,13 +153,13 @@
 					</div>
 				</div>
 			</div>
-			<form action="<?=$_SERVER['dashboard'];?>" method="post" id="myForm" name="myForm">
+			<form action="<?=$_SERVER['dashboard'];?>" method="post" id="myForm" name="myForm" hidden>
 				<input type="text" name="temp" id="temp"/>
 				<input type="submit" id="trans">
         	</form>
-			<div class="panel panel-headline">
+			<div class="panel panel-headline p-0">
 				<br>
-				<div class="panel-body">
+				<div class="panel-body p-0">
 					<div class="row">
 						<div class="col-md-3">
 							<div class="metric">
@@ -231,7 +231,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-11 col-10 p-0 m-auto p-0">
 							<div id="headline-chart" class="ct-chart"></div>
 						</div>
 					</div>
@@ -273,7 +273,8 @@
 		var optionsTempChart = {
 			height: 300,
 			showLine: true,
-			showPoint: true,
+		    showLabel: false,
+			showPoint: false,
 			fullWidth: true,
 			axisX: {
 				showGrid: true
@@ -284,8 +285,8 @@
 			lineSmooth: true,
 			showArea: true,
 			chartPadding: {
-				left: 60,
-				right: 60
+				left: 0,
+				right: 0
 			},
 		};
 
@@ -314,6 +315,7 @@
 
 		function inverseTodo() {
 			document.getElementById("buttonOctave").disabled = false;
+			document.getElementById("buttonStop").disabled = true;
 			return todo = !todo;
 		}
 
@@ -335,6 +337,7 @@
 		
 		async function octaveCall(todo) {
 			document.getElementById("buttonOctave").disabled = true;
+			document.getElementById("buttonStop").disabled = false;
 			var getValues = {};
 
 			$.ajax({
@@ -384,14 +387,14 @@
 					document.getElementById("blueLEDTime").innerHTML = dateMajLedB.toLocaleDateString("fr-FR") + " - " + dateMajLedB.toLocaleTimeString();
 
 					try {
-						if (tempValues.series[0].length < 17) {
+						if (tempValues.series[0].length < 10) {
 							tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2));
-							tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
+							//tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
 						} else {
 							tempValues.series[0].splice(0, 1);
-							tempValues.labels.splice(0, 1);
+							//tempValues.labels.splice(0, 1);
 							tempValues.series[0].push(JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2));
-							tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
+							//tempValues.labels.push(new Date(getSummary["/environment/value"].ts).toLocaleTimeString());
 						}
 					} catch (error) {
 						//console.log(error);
@@ -407,7 +410,6 @@
 
 		dataDashboard()
 		async function dataDashboard(){
-			document.getElementById("buttonOctave").disabled = true;
 			var getValues = {};
 
 			$.ajax({
@@ -419,7 +421,7 @@
 				type: "GET",
 				cache: false,
 				success: function(data, textStatus, request) {
-					console.log("writing data ...")
+					//console.log("writing data ...")
 					summary = data.body.summary;
 
 					let myHistory = {
@@ -439,19 +441,21 @@
 					console.log("error");
 				}
 			})
-			let delayRes = await delayDataDashboard(10000);
+			let delayRes = await delayDataDashboard(50000);
 		}		
 
-		function delayDataDashboard(delayInms) {
+		function delayDataDashboard(delayRes) {
 			return new Promise(resolve => {
 				setTimeout(() => {
-					dataDashboard();
-				}, delayInms);
+					// if (todo) {
+						dataDashboard();
+					// }
+				}, delayRes);
 			});
 		}
 
 		function exportData(x){
-			console.log(x);
+			//console.log(x);
 			let content=JSON.stringify(x);
 			document.getElementById("temp").value = content;
 			submitData();

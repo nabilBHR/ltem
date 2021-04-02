@@ -188,7 +188,7 @@
 
 </body>
 <script>
-var todo = false;
+var todo = true;
 
 // headline charts
 let tempValues = {
@@ -215,10 +215,6 @@ let iaqValues = {
         []
     ]
 };
-
-
-
-
 
 new Chartist.Line('#headline-chart', tempValues, optionsChart);
 new Chartist.Line('#headline-chart-1', tempValues, optionsChart);
@@ -300,7 +296,7 @@ function delayDataDashboard(delayInms) {
 }
 
 function exportData(x){
-    console.log(x);
+    //console.log(x);
     let content=JSON.stringify(x);
     document.getElementById("temp").value = content;
     submitData();
@@ -327,10 +323,10 @@ var optionsChart = {
     showPoint: false,
     fullWidth: true,
     axisX: {
-        showGrid: false
+        showGrid: true
     },
     axisY: {
-        showGrid: false
+        showGrid: true
     },
     lineSmooth: true,
     showArea: false,
