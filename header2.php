@@ -76,7 +76,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
     </div>
   </div>
 
- <!-- Header Mobile -->
+  <!-- Header Mobile -->
   <div class="wrap_header_mobile" style="background-color:#FF7900  ;">
     <!-- Logo moblie -->
     <a href="#" class="logo-mobile">
@@ -96,13 +96,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
               <?php echo '<strong> Utilisateur : </strong><br>' . $_SESSION['nomu'] . '	' . $_SESSION['prenomu'] . '<hr>' . '<strong> E-mail : </strong><br>' . $_SESSION['mailu']; ?>
             </div>
             <div class="header-cart-buttons">
-              <div class="header-cart-wrapbtn">
-                <!-- Button -->
-                <a href="parametres.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                  Paramètres
-                </a>
-              </div>
-              <div class="header-cart-wrapbtn">
+              <div style="width: 75%; margin: auto;">
                 <form method="post">
                   <input type="submit" name="btndec" value="Déconnexion" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
                 </form>
