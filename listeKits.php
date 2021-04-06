@@ -46,7 +46,7 @@
 		<div class="card-header">
 			Mes kits
 		</div>
-		<div class="card-body">
+		<div class="card-body mt-5">
 			<a href="ajouterKit.php" type="submit" name="btnAddCt" class="btn btn-dark bo-rad-23"><i class="fa fa-plus" aria-hidden="true"></i>
 				Ajouter un kit
 			</a>
@@ -192,10 +192,17 @@
 					dataOctave = (data.body).find(element => {
 						return element.hardware.imei === imei;
 					});
-					if ((dataOctave.timeSinceLastSeen / 1000) < 10 && dataOctave.synced == true) {
-						document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
-						document.getElementById("sync" + imei).innerHTML = "Oui";
-					} else {
+					if (dataOctave.hardware.module != undefined) {
+						if ((dataOctave.timeSinceLastSeen / 1000) <= 60){	
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/connected.svg' width='20px'>";
+							document.getElementById("sync" + imei).innerHTML = "Oui";
+							document.getElementById("but" + imei).disabled = false;
+						} else {
+							document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
+							document.getElementById("sync" + imei).innerHTML = "Oui";
+							document.getElementById("but" + imei).disabled = true;
+						}
+					}else{
 						document.getElementById(imei).innerHTML = "<img src='./images/icons/not_connected.svg' width='20px'>";
 						document.getElementById("sync" + imei).innerHTML = 'Non';
 						document.getElementById("but" + imei).disabled = true;

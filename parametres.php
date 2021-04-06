@@ -42,7 +42,7 @@
 
 <body class="animsition">
 	<?php require "header2.php"; ?>
-	<div class="card bg-light ">
+	<div class="card bg-light m-t-85">
 		<img class="fit-picture" src="images/page-under-construction.jpg" alt="Page under construction">
 	</div>
 	<?php require "footer.php" ?>

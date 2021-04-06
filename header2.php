@@ -22,33 +22,13 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
 }
 
 ?>
-
 <!-- Header -->
-<header class="header1">
+<header class="header1 fixed-top">
 
   <!-- Header desktop -->
-  <div class="container-menu-header">
+  <div>
 
-    <div class="topbar">
-      <table>
-        <tr>
-          <th class="col-lg-12 col-md-6">
-            <div class="col-lg-12 col-md-6">
-              <div class="media">
-                <div class="d-flex">
-                  <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
-                </div>
-                <div class="media-body">
-                  Mettre un truc ici ...
-                </div>
-              </div>
-            </div>
-          </th>
-        </tr>
-      </table>
-    </div>
-
-    <div style="background-color:#FF7900  ;" class="wrap_header">
+    <div style="background-color:#FF7900;" class="wrap_header">
       <!-- Logo -->
       <a href="#" class="logo">
         <img src="images/icons/logo.png" alt="IMG-LOGO">
@@ -96,7 +76,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
     </div>
   </div>
 
-  <!-- Header Mobile -->
+ <!-- Header Mobile -->
   <div class="wrap_header_mobile" style="background-color:#FF7900  ;">
     <!-- Logo moblie -->
     <a href="#" class="logo-mobile">
@@ -139,50 +119,15 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
     </div>
   </div>
 
+
   <!-- Menu Mobile -->
-  <div class="wrap-side-menu">
+  <div class="wrap-side-menu fixed-top" style="top: 85px;">
     <nav class="side-menu">
-      <div">
-        <br>
-        <div class="col-lg-11 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-map-marker"></i></div>
-            </div>
-            <div class="media-body">
-              <p></p>Magasin Wa3ou Electronics <br />Rue Hassiba Ben Bouali, Alger centre.</p>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <div class="col-lg-10 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-phone"></i></div>
-            </div>
-            <div class="media-body">
-              <a href="tel:+1109171234567">0558947335</a> <br>
-              <a href="tel:+1101911897654">0555678854</a>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <div class="col-lg-10 col-md-6">
-          <div class="media">
-            <div class="d-flex">
-              <div class="icon-box col-md-3 col-sm-4"><i class="fa fa-envelope"></i></a></div>
-            </div>
-            <div class="media-body">
-              Mettre un truc ici ...
-            </div>
-          </div>
-        </div>
-        <br>
-        <div align="center" style="background-color:#FF7900  ;">
-          <button style="width: 180px; margin:2px" type="button" onclick="location.href = 'dashboard.php'" class="btn btn-dark"> <i class="fa fa-bar-chart" aria-hidden="true"></i> DashBoard</button> </br>
-          <button style="width: 180px; " type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i> Mes kits</button></br>
-          <button style="width: 180px; margin:2px" type=" button" onclick="location.href = 'historique.php'" class="btn btn-dark"><i class="fa fa-history" aria-hidden="true"></i> Historique</button>
-        </div>
+      <div align="center" style="background-color:#FF7900; padding:15px;">
+        <button style="width: 180px; margin:5px" type="button" onclick="location.href = 'dashboard.php'" class="btn btn-dark"> <i class="fa fa-bar-chart" aria-hidden="true"></i> DashBoard</button> </br>
+        <button style="width: 180px; margin:5px" type="button" onclick="location.href = 'listeKits.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i> Mes kits</button></br>
+        <button style="width: 180px; margin:5px" type=" button" onclick="location.href = 'historique.php'" class="btn btn-dark"><i class="fa fa-history" aria-hidden="true"></i> Historique</button>
+      </div>
     </nav>
   </div>
 </header>

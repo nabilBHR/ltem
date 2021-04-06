@@ -82,7 +82,7 @@ if (isset($_GET['mail'], $_GET['key']) and !empty($_GET['mail']) and !empty($_GE
 
 	<?php require "header1.php"; ?>
 
-	<div class="card bg-light ">
+	<div class="card bg-light m-t-85">
 		<div align="center" class="card-header">Inscription réussie ! </div>
 		<div class="card-body">
 			<DIV ALIGN="CENTER">

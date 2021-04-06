@@ -45,11 +45,11 @@
 	<?php require "header1.php"; ?>
 
 	<!-- Slide1 -->
-	<section class="slide1">
+	<section class="slide1 m-t-75">
 		<div class="wrap-slick1">
 			<div class="slick1">
 
-				<div class="item-slick1 item3-slick1" style="background-image: url(images/master-slide-02.png);">
+				<div class="item-slick1 item3-slick1 p-t-40 p-b-30" style="background-image: url(images/master-slide-02.png);box-sizing: content-box;">
 					<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
 						<h2 class="caption1-slide1 xl-text2 t-center bo1 p-b-6 animated visible-false m-b-22" data-appear="rotateInDownLeft">
 							LTEM MONITOR
