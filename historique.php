@@ -78,14 +78,14 @@
     ?>
     <div>
         <div class="buttons d-flex justify-content-center p-t-80" style="margin:1.5em">
-            <button type="button" class="btn btn-success m-r-7" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i
+            <button type="button" class="btn btn-success m-r-7" id="buttonOctave" onclick="Dashboard(inverseTodo())"><i
                     class="fa fa-play" aria-hidden="true"></i> Capture</button>
-            <button type="button" class="btn btn-danger m-l-7" onclick="inverseTodo()"><i class="fa fa-stop"
+            <button type="button" class="btn btn-danger m-l-7" id="stopOctave" onclick="inverseTodo()"><i class="fa fa-stop"
                     aria-hidden="true"></i> Arrêter</button>
         </div>
 
         <div class="row mt-4 col-12 d-flex justify-content-center m-0 p-0">
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <div class="metric bg-white">
                     <img class="myicon" src="images/icons/centigrade.png" />
                     <p>
@@ -94,7 +94,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <div class="metric bg-white">
                     <img class="myicon" src="images/icons/atmospheric.png" />
                     <p>
@@ -103,7 +103,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <div class="metric bg-white">
                     <img class="myicon" src="images/icons/sunlight.png" />
                     <p>
@@ -112,7 +112,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <div class="metric bg-white">
                     <img class="myicon" src="images/icons/breath.png" />
                     <p>
@@ -188,7 +188,6 @@
 
 </body>
 <script>
-var todo = true;
 
 // headline charts
 let tempValues = {
@@ -217,18 +216,19 @@ let iaqValues = {
 };
 
 new Chartist.Line('#headline-chart', tempValues, optionsChart);
-new Chartist.Line('#headline-chart-1', tempValues, optionsChart);
-new Chartist.Line('#headline-chart-2', tempValues, optionsChart);
-new Chartist.Line('#headline-chart-3', tempValues, optionsChart);
-// new Chartist.Bar('#headline-chart-2', tempValues, optionsBarChart);
+new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
+new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
+new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
 var todo = false;
+document.getElementById("stopOctave").disabled = true;
 
 var companyName = "universit_gustave_eiffel";
 var dID = "d6048d14e337dab5dbbb15059";
 
-Dashboard()
-async function Dashboard(){
+// Dashboard()
+async function Dashboard(todo){
     document.getElementById("buttonOctave").disabled = true;
+    document.getElementById("stopOctave").disabled = false;
     var getValues = {};
 
     $.ajax({
@@ -240,8 +240,12 @@ async function Dashboard(){
         type: "GET",
         cache: false,
         success: function(data, textStatus, request) {
-            
             $.getJSON("myKitData.json", function (json) {
+                tempValues.series[0].splice(0,tempValues.series[0].length);
+                pressValues.series[0].splice(0,pressValues.series[0].length);
+                lumValues.series[0].splice(0,lumValues.series[0].length);
+                iaqValues.series[0].splice(0,iaqValues.series[0].length);
+            
                 document.getElementById("temp").innerHTML = (json.map(e=>(tempValues.series[0].push(e.temperature),e.temperature)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" °C"
                 document.getElementById("pressur").innerHTML = (json.map(e=>(pressValues.series[0].push(e.pression),e.pression)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" mb"
                 document.getElementById("light").innerHTML = (json.map(e=>(lumValues.series[0].push(e.lumiere),e.lumiere)).reduce((a, b) => (parseInt(a) + parseInt(b))) / json.length).toFixed(2)+" %"
@@ -266,31 +270,24 @@ async function Dashboard(){
                 //     alert(request.getResponseHeader('some_header'));
                 //     console.log("error");
                 // }
-
-                // tempValues.series[0].splice(0, 4);
-                // tempValues.series[0].push(temperature)
-                // tempValues.series[0].push(pression)
-                // tempValues.series[0].push(lumiere)
-                // tempValues.series[0].push(iaq)
             })
-            // console.log("tempV : ",tempValues.series[0])
-            new Chartist.Line('#headline-chart', tempValues, optionsChart);
-            new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
-            new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
-            new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
         }
     })
-    // let delayRes = await delayDataDashboard(1000);
+    let delayRes = await delayDataDashboard(5000);
 }		
 
 function delayDataDashboard(delayInms) {
     return new Promise(resolve => {
         setTimeout(() => {
-            Dashboard();
-            new Chartist.Line('#headline-chart', tempValues, optionsChart);
-            new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
-            new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
-            new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
+            if (todo){
+                Dashboard(todo);
+                new Chartist.Line('#headline-chart', tempValues, optionsChart);
+                new Chartist.Line('#headline-chart-1', pressValues, optionsChart);
+                new Chartist.Line('#headline-chart-2', lumValues, optionsChart);
+                new Chartist.Line('#headline-chart-3', iaqValues, optionsChart);
+                //console.log(tempValues.series[0]);
+            }
+            // console.log(tempValues.series[0]);
         }, delayInms);
     });
 }
@@ -323,13 +320,13 @@ var optionsChart = {
     showPoint: false,
     fullWidth: true,
     axisX: {
-        showGrid: true
+        showGrid: false
     },
     axisY: {
         showGrid: true
     },
     lineSmooth: true,
-    showArea: false,
+    showArea: true,
     chartPadding: {
         left: 20,
         right: 20
@@ -342,6 +339,7 @@ var optionsBarChart = {
 
 function inverseTodo() {
     document.getElementById("buttonOctave").disabled = false;
+    document.getElementById("stopOctave").disabled = true;
     return todo = !todo;
 }
 
