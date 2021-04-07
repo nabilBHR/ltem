@@ -59,10 +59,6 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
             </div>
             <div class="header-cart-buttons">
               <div class="header-cart-wrapbtn">
-                <!-- Button -->
-                <a href="parametres.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                  Paramètres
-                </a>
               </div>
               <div class="header-cart-wrapbtn">
                 <form method="post">

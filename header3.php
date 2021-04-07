@@ -49,7 +49,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
       <!-- Header Icon -->
       <div class="header-icons">
         <span class="linedivide1"></span>
-        <?php echo "Administrateur" ?>
+        <?php echo "Administrateur"; ?>
         <div class="header-wrapicon2">
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <!-- Header cart noti -->
@@ -60,9 +60,6 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
             <div class="header-cart-buttons">
               <div class="header-cart-wrapbtn">
                 <!-- Button -->
-                <a href="parametres2.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                  Paramètres
-                </a>
               </div>
               <div class="header-cart-wrapbtn">
                 <form method="post">
@@ -87,7 +84,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
       <!-- Header Icon mobile -->
       <div class="header-icons-mobile">
         <span class="linedivide2"></span>
-        <?php echo "Administrateur" ?>
+        <?php echo "Administrateur"; ?>
         <div class="header-wrapicon2">
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <!-- Header cart noti -->
