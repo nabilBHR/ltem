@@ -49,7 +49,7 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
       <!-- Header Icon -->
       <div class="header-icons">
         <span class="linedivide1"></span>
-        <?php echo "Administrateur" ?>
+        <?php echo "Administrateur"; ?>
         <div class="header-wrapicon2">
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <!-- Header cart noti -->
@@ -60,9 +60,6 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
             <div class="header-cart-buttons">
               <div class="header-cart-wrapbtn">
                 <!-- Button -->
-                <a href="parametres2.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                  Paramètres
-                </a>
               </div>
               <div class="header-cart-wrapbtn">
                 <form method="post">
@@ -90,6 +87,19 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
         <?php echo "Administrateur"; ?>
         <div class="header-wrapicon2">
           <img src="images/icons/icon-header-01.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+          <!-- Header cart noti -->
+          <div class="header-cart header-dropdown" style="background-color:#EBF5FB ; border-radius: 30px ; ">
+            <div class="alert alert-secondary" role="alert">
+              <?php echo '<strong> Utilisateur : </strong><br> Addministrateur' . '<hr>' . '<strong> E-mail : </strong><br>' . $_SESSION['mailu']; ?>
+            </div>
+            <div class="header-cart-buttons">
+              <div style="width: 75%; margin: auto;">
+                <form method="post">
+                  <input type="submit" name="btndec" value="Déconnexion" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -103,45 +113,6 @@ if (isset($_POST['btndec']) or isset($_POST['btndec2'])) {
   <!-- Menu Mobile -->
   <div class="wrap-side-menu fixed-top" style="top: 85px;">
     <nav class="side-menu">
-      <br>
-      <div class="col-lg-11 col-md-6">
-        <div class="media">
-
-          <div class="media-body">
-            <div class="alert alert-secondary" role="alert">
-              <?php echo '<strong> Utilisateur : </strong><br>' . 'Administrateur' . '<hr>' . '<strong> E-mail : </strong><br>' . $_SESSION['mailu']; ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="col-lg-10 col-md-6">
-        <div class="media">
-
-          <div class="media-body">
-            <div class="header-cart-wrapbtn">
-              <!-- Button -->
-              <a href="parametres2.php" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                Paramètres
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="col-lg-10 col-md-6">
-        <div class="media">
-
-          <div class="media-body">
-            <div class="header-cart-wrapbtn">
-              <form method="post">
-                <input type="submit" name="btndec" value="Déconnexion" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
       <div align="center" style="background-color:#FF7900; padding:15px;">
         <button style="width: 180px; margin:5px" type="button" onclick="location.href = 'messagerie.php'" class="btn btn-dark"> <i class="fa fa-envelope-o" aria-hidden="true"></i> Messagerie</button> </br>
         <button style="width: 180px; margin:5px" type="button" onclick="location.href = 'listKitsAdmin.php'" class="btn btn-dark"><i class="fa fa-microchip" aria-hidden="true"></i> Liste des kits</button></br>
