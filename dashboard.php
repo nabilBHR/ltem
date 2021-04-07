@@ -98,7 +98,7 @@
 			<h1 style="font-size:30px" class="panel-title">Dashboard</h1>
 
 			<div class="buttons" style="margin:.5em">
-				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
+				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo());dataDashboard()"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
 				<button type="button" class="btn btn-danger" id="stopOctave" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
 			</div>
 
@@ -183,7 +183,7 @@
 				<br>
 				<div class="panel-body p-0">
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<span style="border-radius: 50%;float: left;width: 50px;height: 50px;line-height: 50px;background-color: white;text-align: center;">
 									<div id="system-load" class="easy-pie-chart" data-percent="0"></div>
@@ -195,7 +195,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/centigrade.png" />
 								<p>
@@ -204,7 +204,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/humidity.png" />
 								<p>
@@ -213,7 +213,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/atmospheric.png" />
 								<p>
@@ -222,27 +222,27 @@
 								</p>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-3">
-							<div class="metric">
+						<div class="col-md-4 col-xl-3">
+							<div class="metric pb-0">
 								<img class="myicon" src="images/icons/air-quality.png" />
 								<p>
 									<span class="number" id="co2"> - </span>
 									<span class="title">CO2</span>
+									<span id="co2-chart-container"></span>
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
-							<div class="metric">
+						<div class="col-md-4 col-xl-3">
+							<div class="metric pb-0">
 								<img class="myicon" src="images/icons/breath.png" />
 								<p>
 									<span class="number" id="airqualite"> - </span>
 									<span class="title">iaq</span>
+									<span id="iaq-chart-container"></span>
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/sunlight.png" />
 								<p>
@@ -258,14 +258,17 @@
 						<div>
 							<div class="col-md-11 col-11 p-0 m-auto p-0">
 								<div id="headline-chart" class="ct-chart"></div>
+								<div>T(1s)</div>
 							</div>
 						</div>
 					</div>	
 					<div class="panel">
-						<div class="panel-heading"><h3>Batterie</h3></div>
+						<div class="panel-heading"><h3>Batterie</h3>
+						<div>Durée d'utilisation estimée : <b id="timeEstimation"></b></div></div>
 						<div>
 							<div class="col-md-11 col-11 p-0 m-auto p-0">
 								<div id="battery-chart" class="ct-chart"></div>
+								
 							</div>
 						</div>
 					</div>	
@@ -291,15 +294,27 @@
 	<script src="libs/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="libs/vendor/chartist/js/chartist.min.js"></script>
 	<script src="libs/scripts/klorofil-common.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 
 	<script>
 		var battery;
+		var co2 = "0";
+		var iaq = "0";
+
 		var todo = false;
 		document.getElementById("stopOctave").disabled = true;
 
 		// headline charts
 		var tempValues = {
-			labels: [],
+			labels: ["t(s)"],
+			series: [
+				[],
+			]
+		};
+
+		var batteryValues = {
+			labels: ["t(5s)"],
 			series: [
 				[],
 			]
@@ -309,7 +324,7 @@
 			height: 300,
 			showLine: true,
 		    showLabel: false,
-			showPoint: false,
+			showPoint: true,
 			fullWidth: true,
 			axisX: {
 				showGrid: true
@@ -325,8 +340,28 @@
 			},
 		};
 
+		var optionsBatteryChart = {
+			height: 300,
+			showLine: true,
+		    showLabel: false,
+			showPoint: false,
+			fullWidth: true,
+			axisX: {
+				showGrid: true
+			},
+			axisY: {
+				showGrid: true
+			},
+			lineSmooth: true,
+			showArea: true,
+			chartPadding: {
+				left: 10,
+				right: 10
+			},
+		};
+
 		new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
-		new Chartist.Line('#battery-chart', tempValues, optionsTempChart);
+		new Chartist.Line('#battery-chart', batteryValues, optionsBatteryChart);
 
 		var sysLoad = $('#system-load').easyPieChart({
 			size: 50,
@@ -355,6 +390,107 @@
 			return todo = !todo;
 		}
 
+		const dataSource = {
+			chart: {
+				theme: "fusion",
+				showvalue: "0",
+				pointerbghovercolor: "#ffffff",
+				pointerbghoveralpha: "80",
+				pointerhoverradius: "12",
+				showborderonhover: "1",
+				pointerborderhovercolor: "#000",
+				pointerborderhoverthickness: "2",
+				showtickmarks: "0",
+				numbersuffix: "%"
+			},
+			colorrange: {
+				color: [
+				{
+					minvalue: "0",
+					maxvalue: "40",
+					label: "Low",
+					code: "#6baa01"
+				},
+				{
+					minvalue: "40",
+					maxvalue: "80",
+					label: "Moderate",
+					code: "#f8bd19"
+				},
+				{
+					minvalue: "80",
+					maxvalue: "110",
+					label: "High",
+					code: "#e44a00"
+				}
+				]
+			},
+			pointers: {
+				pointer: [
+				{	
+					id:"iaq",
+					value: iaq,
+				}
+				]
+			}
+		};
+
+		
+		const dataSource2 = {
+			chart: {
+				theme: "fusion",
+				showvalue: "0",
+				pointerbghovercolor: "#ffffff",
+				pointerbghoveralpha: "80",
+				pointerhoverradius: "12",
+				showborderonhover: "1",
+				pointerborderhovercolor: "#000",
+				pointerborderhoverthickness: "2",
+				showtickmarks: "0",
+				numbersuffix: "%"
+			},
+			colorrange: {
+				color: [
+				{
+					minvalue: "300",
+					maxvalue: "1000",
+					label: "Low",
+					code: "#6baa01"
+				},
+				{
+					minvalue: "1000",
+					maxvalue: "2500",
+					label: "Moderate",
+					code: "#f8bd19"
+				},
+				{
+					minvalue: "2500",
+					maxvalue: "5000",
+					label: "High",
+					code: "#e44a00"
+				}
+				]
+			},
+			pointers: {
+				pointer: [
+				{
+					id:"co2",
+					value: co2,
+				}
+				]
+			}
+		};
+
+		FusionCharts.ready(function() {
+			var iaqGauge = new FusionCharts({type: "hlineargauge",
+				renderAt: "iaq-chart-container",width: "100%",height: "30%",dataFormat: "json", dataSource, id:"iaqChart" 
+			}).render();
+		
+			var co2Gauge = new FusionCharts({type: "hlineargauge",
+				renderAt: "co2-chart-container",width: "100%",height: "25%",dataFormat: "json",dataSource:dataSource2, id:"co2Chart"
+			}).render();
+		});
+
 		function delay(delayInms) {
 			return new Promise(resolve => {
 				setTimeout(() => {
@@ -363,6 +499,8 @@
 						$("#percent").text(battery + "%");
 						sysLoad.data('easyPieChart').update(battery);
 						new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
+						FusionCharts.items["iaqChart"].setDataForId("iaq", iaq);
+						FusionCharts.items["co2Chart"].setDataForId("co2", co2);
 					}
 				}, delayInms);
 			});
@@ -399,8 +537,10 @@
 					document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2) + " C°";
 					document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary["/environment/value"].v).pressure).toFixed(0) + " mb";
 					document.getElementById("humidite").innerHTML = JSON.parse(getSummary["/environment/value"].v).humidity.toFixed(2) + " %";
-					document.getElementById("co2").innerHTML = JSON.parse(getSummary["/environment/value"].v).co2EquivalentValue.toFixed(2) + " ";
-					document.getElementById("airqualite").innerHTML = JSON.parse(getSummary["/environment/value"].v).iaqValue.toFixed(2);
+					co2 = JSON.parse(getSummary["/environment/value"].v).co2EquivalentValue.toFixed(2);
+					document.getElementById("co2").innerHTML = co2 + " ";
+					iaq = JSON.parse(getSummary["/environment/value"].v).iaqValue.toFixed(2);
+					document.getElementById("airqualite").innerHTML = iaq;
 					document.getElementById("light").innerHTML = (getSummary["/light/value"].v * 100).toFixed(2) + " %";
 					
 					document.getElementById("redLED").innerHTML = getSummary["/leds/tri/red/enable"].v;
@@ -455,7 +595,7 @@
 			let delayRes = await delay(1000);
 		}
 
-		dataDashboard()
+		// dataDashboard()
 		async function dataDashboard(){
 			var getValues = {};
 
@@ -478,19 +618,29 @@
 						"iaq":JSON.parse(summary["/environment/value"].v).iaqValue.toFixed(2)
 					};
 
+					let mAh = JSON.parse(summary["/battery/value"].v).mAh;
+					let mA = JSON.parse(summary["/battery/value"].v).mA;
+
 					let batteryHistory ={
 						"health": JSON.parse(summary["/battery/value"].v).health,
 						"percent": JSON.parse(summary["/battery/value"].v).percent,
-						"mAh": JSON.parse(summary["/battery/value"].v).mAh,
-						"mA": JSON.parse(summary["/battery/value"].v).mA,
-						"degC":JSON.parse(summary["/battery/value"].v).degC 
-					} 
+						"mAh": mAh,
+						"mA": mA,
+						"degC": JSON.parse(summary["/battery/value"].v).degC,
+						"time": new Date().toLocaleTimeString("fr-FR")
+					}
 					
+					document.getElementById("timeEstimation").innerHTML = Math.abs(mAh/mA).toFixed(0)+"h"+((Math.abs(mAh/mA).toFixed(2)-Math.abs(mAh/mA).toFixed(0))*60).toFixed(0)+"min";
 					//exportData(myHistory)
 					exportDataBattery(batteryHistory)
 					//$("#trans").click();
 					$("#send").click();
-
+					if (batteryValues.series[0].length < 100){
+						batteryValues.series[0].push(mAh);
+					}else{
+						batteryValues.series[0].splice(0, 1);
+						batteryValues.series[0].push(mAh);
+					}
 				},
 				error: function(request, textStatus, errorThrown) {
 					alert(request.getResponseHeader('some_header'));
@@ -503,9 +653,10 @@
 		function delayDataDashboard(delayRes) {
 			return new Promise(resolve => {
 				setTimeout(() => {
-					console.log(todo);
+					//console.log(todo);
 					if (todo) {
 						dataDashboard();
+						new Chartist.Line('#battery-chart', batteryValues, optionsBatteryChart);
 					}
 				}, delayRes);
 			});
