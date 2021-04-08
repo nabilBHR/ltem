@@ -79,6 +79,18 @@
             $jsonData = json_encode($tempArray);
             file_put_contents($file, $jsonData);
         }
+		if(isset($_POST['batteryInfo']) && ($_POST['batteryInfo']!="")){
+            $file = 'batteryInfo.json';
+            $current = file_get_contents($file);
+            if($current==null){
+                file_put_contents($file, "[]");
+                $current = file_get_contents($file);
+            }
+            $tempArray = json_decode($current);
+            array_push($tempArray ,json_decode($_POST['batteryInfo']));
+            $jsonData = json_encode($tempArray);
+            file_put_contents($file, $jsonData);
+        }
     ?>
 	<div class="main-content m-t-80">
 		<div align="center" class="container-fluid">
@@ -86,8 +98,8 @@
 			<h1 style="font-size:30px" class="panel-title">Dashboard</h1>
 
 			<div class="buttons" style="margin:.5em">
-				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo())"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
-				<button type="button" class="btn btn-danger" id="buttonStop" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
+				<button type="button" class="btn btn-success" id="buttonOctave" onclick="octaveCall(inverseTodo());dataDashboard()"><i class="fa fa-play" aria-hidden="true"></i> Capture</button>
+				<button type="button" class="btn btn-danger" id="stopOctave" onclick="inverseTodo()"><i class="fa fa-stop" aria-hidden="true"></i> Arrêter</button>
 			</div>
 
 			<div class="row" style="display:flex;justify-content:center;align-items:center">
@@ -110,7 +122,13 @@
 								<h5> Réseau :</h5>
 								<p><b>Rat. : </b><span class="panel-subtitle" id="rat"></span></p>
 								<p><b>Status : </b><span class="panel-subtitle" id="status"></span></p>
-								<p><b>Niveau du signal : </b><span class="panel-subtitle" id="rxLevel"></span></p>
+								<p>
+									<b>Niveau du signal : </b>
+									<span style="display: inline-flex;align-items: baseline;">
+										<span class="panel-subtitle" id="rxLevel"></span>
+										<img id="signalIcon" style="width:20px; margin-left:20px"></span>
+									</span>
+								</p>	
 								<h5> Version Locale :</h5>
 								<p><b>Firmware : </b><span class="panel-subtitle" id="firmware"></span></p>
 								<p><b>Version : </b><span class="panel-subtitle" id="version"></span></p>
@@ -157,11 +175,15 @@
 				<input type="text" name="temp" id="temp"/>
 				<input type="submit" id="trans">
         	</form>
+			<form action="<?=$_SERVER['dashboard'];?>" method="post" id="myFormBattery" name="myFormBattery" hidden>
+				<input type="text" name="battery" id="battery"/>
+				<input type="submit" id="send">
+        	</form>
 			<div class="panel panel-headline p-0">
 				<br>
 				<div class="panel-body p-0">
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<span style="border-radius: 50%;float: left;width: 50px;height: 50px;line-height: 50px;background-color: white;text-align: center;">
 									<div id="system-load" class="easy-pie-chart" data-percent="0"></div>
@@ -173,7 +195,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/centigrade.png" />
 								<p>
@@ -182,7 +204,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/humidity.png" />
 								<p>
@@ -191,7 +213,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/atmospheric.png" />
 								<p>
@@ -200,27 +222,27 @@
 								</p>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-3">
-							<div class="metric">
+						<div class="col-md-4 col-xl-3">
+							<div class="metric pb-0">
 								<img class="myicon" src="images/icons/air-quality.png" />
 								<p>
 									<span class="number" id="co2"> - </span>
 									<span class="title">CO2</span>
+									<span id="co2-chart-container"></span>
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
-							<div class="metric">
+						<div class="col-md-4 col-xl-3">
+							<div class="metric pb-0">
 								<img class="myicon" src="images/icons/breath.png" />
 								<p>
 									<span class="number" id="airqualite"> - </span>
 									<span class="title">iaq</span>
+									<span id="iaq-chart-container"></span>
 								</p>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-xl-3">
 							<div class="metric">
 								<img class="myicon" src="images/icons/sunlight.png" />
 								<p>
@@ -230,11 +252,26 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-11 col-10 p-0 m-auto p-0">
-							<div id="headline-chart" class="ct-chart"></div>
-						</div>
 					</div>
+					<div class="panel">
+						<div class="panel-heading"><h3>Temperature</h3></div>
+						<div>
+							<div class="col-md-11 col-11 p-0 m-auto p-0">
+								<div id="headline-chart" class="ct-chart"></div>
+								<div>T(1s)</div>
+							</div>
+						</div>
+					</div>	
+					<div class="panel">
+						<div class="panel-heading"><h3>Batterie</h3>
+						<div>Durée d'utilisation estimée : <b id="timeEstimation"></b></div></div>
+						<div>
+							<div class="col-md-11 col-11 p-0 m-auto p-0">
+								<div id="battery-chart" class="ct-chart"></div>
+								
+							</div>
+						</div>
+					</div>	
 				</div>
 			</div>
 		</div>
@@ -257,14 +294,27 @@
 	<script src="libs/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="libs/vendor/chartist/js/chartist.min.js"></script>
 	<script src="libs/scripts/klorofil-common.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+	<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 
 	<script>
 		var battery;
+		var co2 = "0";
+		var iaq = "0";
+
 		var todo = false;
+		document.getElementById("stopOctave").disabled = true;
 
 		// headline charts
 		var tempValues = {
-			labels: [],
+			labels: ["t(s)"],
+			series: [
+				[],
+			]
+		};
+
+		var batteryValues = {
+			labels: ["t(5s)"],
 			series: [
 				[],
 			]
@@ -274,7 +324,7 @@
 			height: 300,
 			showLine: true,
 		    showLabel: false,
-			showPoint: false,
+			showPoint: true,
 			fullWidth: true,
 			axisX: {
 				showGrid: true
@@ -290,7 +340,28 @@
 			},
 		};
 
+		var optionsBatteryChart = {
+			height: 300,
+			showLine: true,
+		    showLabel: false,
+			showPoint: false,
+			fullWidth: true,
+			axisX: {
+				showGrid: true
+			},
+			axisY: {
+				showGrid: true
+			},
+			lineSmooth: true,
+			showArea: true,
+			chartPadding: {
+				left: 10,
+				right: 10
+			},
+		};
+
 		new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
+		new Chartist.Line('#battery-chart', batteryValues, optionsBatteryChart);
 
 		var sysLoad = $('#system-load').easyPieChart({
 			size: 50,
@@ -315,9 +386,110 @@
 
 		function inverseTodo() {
 			document.getElementById("buttonOctave").disabled = false;
-			document.getElementById("buttonStop").disabled = true;
+			document.getElementById("stopOctave").disabled = true;
 			return todo = !todo;
 		}
+
+		const dataSource = {
+			chart: {
+				theme: "fusion",
+				showvalue: "0",
+				pointerbghovercolor: "#ffffff",
+				pointerbghoveralpha: "80",
+				pointerhoverradius: "12",
+				showborderonhover: "1",
+				pointerborderhovercolor: "#000",
+				pointerborderhoverthickness: "2",
+				showtickmarks: "0",
+				numbersuffix: "%"
+			},
+			colorrange: {
+				color: [
+				{
+					minvalue: "0",
+					maxvalue: "40",
+					label: "Low",
+					code: "#6baa01"
+				},
+				{
+					minvalue: "40",
+					maxvalue: "80",
+					label: "Moderate",
+					code: "#f8bd19"
+				},
+				{
+					minvalue: "80",
+					maxvalue: "110",
+					label: "High",
+					code: "#e44a00"
+				}
+				]
+			},
+			pointers: {
+				pointer: [
+				{	
+					id:"iaq",
+					value: iaq,
+				}
+				]
+			}
+		};
+
+		
+		const dataSource2 = {
+			chart: {
+				theme: "fusion",
+				showvalue: "0",
+				pointerbghovercolor: "#ffffff",
+				pointerbghoveralpha: "80",
+				pointerhoverradius: "12",
+				showborderonhover: "1",
+				pointerborderhovercolor: "#000",
+				pointerborderhoverthickness: "2",
+				showtickmarks: "0",
+				numbersuffix: "%"
+			},
+			colorrange: {
+				color: [
+				{
+					minvalue: "300",
+					maxvalue: "1000",
+					label: "Low",
+					code: "#6baa01"
+				},
+				{
+					minvalue: "1000",
+					maxvalue: "2500",
+					label: "Moderate",
+					code: "#f8bd19"
+				},
+				{
+					minvalue: "2500",
+					maxvalue: "5000",
+					label: "High",
+					code: "#e44a00"
+				}
+				]
+			},
+			pointers: {
+				pointer: [
+				{
+					id:"co2",
+					value: co2,
+				}
+				]
+			}
+		};
+
+		FusionCharts.ready(function() {
+			var iaqGauge = new FusionCharts({type: "hlineargauge",
+				renderAt: "iaq-chart-container",width: "100%",height: "30%",dataFormat: "json", dataSource, id:"iaqChart" 
+			}).render();
+		
+			var co2Gauge = new FusionCharts({type: "hlineargauge",
+				renderAt: "co2-chart-container",width: "100%",height: "25%",dataFormat: "json",dataSource:dataSource2, id:"co2Chart"
+			}).render();
+		});
 
 		function delay(delayInms) {
 			return new Promise(resolve => {
@@ -327,6 +499,8 @@
 						$("#percent").text(battery + "%");
 						sysLoad.data('easyPieChart').update(battery);
 						new Chartist.Line('#headline-chart', tempValues, optionsTempChart);
+						FusionCharts.items["iaqChart"].setDataForId("iaq", iaq);
+						FusionCharts.items["co2Chart"].setDataForId("co2", co2);
 					}
 				}, delayInms);
 			});
@@ -337,7 +511,7 @@
 		
 		async function octaveCall(todo) {
 			document.getElementById("buttonOctave").disabled = true;
-			document.getElementById("buttonStop").disabled = false;
+    		document.getElementById("stopOctave").disabled = false;
 			var getValues = {};
 
 			$.ajax({
@@ -352,29 +526,42 @@
 
 					getValues = data.body;
 					getSummary = getValues.summary;
-					battery = JSON.parse(getSummary["/battery/value"].s).percent;
+					
+					battery = JSON.parse(getSummary["/battery/value"].v).percent;
 					document.getElementById("idd").innerHTML = "<b>ID : </b>" + getValues.id;
 					document.getElementById("deviceName").innerHTML = "<b>Nom du device: </b>" + getValues.name;
 					document.getElementById("date").innerHTML = "<b>Dérnière connexion :</b>" + new Date(getValues.lastSeen).toLocaleDateString("fr-FR") + " " + new Date(getValues.lastSeen).toLocaleTimeString();
-					//console.log(getSummary["/leds/tri/red/enable"].v + " " + getSummary["/leds/tri/green/enable"].v + " " + getSummary["/leds/tri/blue/enable"].v);
 					document.getElementById("imei").innerHTML = "<b>IMEI : </b>" + getValues.hardware.imei;
 					document.getElementById("fsn").innerHTML = "<b>Numéro de série : </b>" + getValues.hardware.fsn;
 
-					// console.log(getSummary)
 					document.getElementById("temperatureC").innerHTML = JSON.parse(getSummary["/environment/value"].v).temperature.toFixed(2) + " C°";
 					document.getElementById("pression").innerHTML = convertPascal(JSON.parse(getSummary["/environment/value"].v).pressure).toFixed(0) + " mb";
 					document.getElementById("humidite").innerHTML = JSON.parse(getSummary["/environment/value"].v).humidity.toFixed(2) + " %";
-					document.getElementById("co2").innerHTML = JSON.parse(getSummary["/environment/value"].v).co2EquivalentValue.toFixed(2) + " ";
-					document.getElementById("airqualite").innerHTML = JSON.parse(getSummary["/environment/value"].v).iaqValue.toFixed(2);
+					co2 = JSON.parse(getSummary["/environment/value"].v).co2EquivalentValue.toFixed(2);
+					document.getElementById("co2").innerHTML = co2 + " ";
+					iaq = JSON.parse(getSummary["/environment/value"].v).iaqValue.toFixed(2);
+					document.getElementById("airqualite").innerHTML = iaq;
 					document.getElementById("light").innerHTML = (getSummary["/light/value"].v * 100).toFixed(2) + " %";
+					
 					document.getElementById("redLED").innerHTML = getSummary["/leds/tri/red/enable"].v;
 					document.getElementById("greenLED").innerHTML = getSummary["/leds/tri/green/enable"].v;
 					document.getElementById("blueLED").innerHTML = getSummary["/leds/tri/blue/enable"].v;
 
 					document.getElementById("rat").innerHTML = getValues.report.signal.rat.value;
 					document.getElementById("status").innerHTML = JSON.parse(getSummary["/util/cellular/signal/value"].v).status;
-					document.getElementById("rxLevel").innerHTML = getValues.report.signal.strength.value;
-
+					let signalStrength = getValues.report.signal.strength.value;
+					document.getElementById("rxLevel").innerHTML = signalStrength;
+					if (signalStrength>(-79)){
+						document.getElementById("signalIcon").src = "./images/signal_strength_icons/five.png";
+					}else if(signalStrength<(-80) && signalStrength>(-89)){
+						document.getElementById("signalIcon").src = "./images/signal_strength_icons/four.png";
+					}else if(signalStrength<(-90) && signalStrength>(-99)){
+						document.getElementById("signalIcon").src = "./images/signal_strength_icons/three.png";						
+					}else if(signalStrength<(-100) && signalStrength>(-109)){
+						document.getElementById("signalIcon").src = "./images/signal_strength_icons/two.png";
+					}else if(signalStrength<(-110)){
+						document.getElementById("signalIcon").src = "./images/signal_strength_icons/one.png";
+					}
 					document.getElementById("firmware").innerHTML = getValues.localVersions.firmware;
 					document.getElementById("version").innerHTML = getValues.localVersions.edge;
 
@@ -408,7 +595,7 @@
 			let delayRes = await delay(1000);
 		}
 
-		dataDashboard()
+		// dataDashboard()
 		async function dataDashboard(){
 			var getValues = {};
 
@@ -421,7 +608,6 @@
 				type: "GET",
 				cache: false,
 				success: function(data, textStatus, request) {
-					//console.log("writing data ...")
 					summary = data.body.summary;
 
 					let myHistory = {
@@ -431,25 +617,47 @@
 						"lumiere": (summary["/light/value"].v * 100).toFixed(2),
 						"iaq":JSON.parse(summary["/environment/value"].v).iaqValue.toFixed(2)
 					};
-		
-					exportData(myHistory)
-					$("#trans").click();
 
+					let mAh = JSON.parse(summary["/battery/value"].v).mAh;
+					let mA = JSON.parse(summary["/battery/value"].v).mA;
+
+					let batteryHistory ={
+						"health": JSON.parse(summary["/battery/value"].v).health,
+						"percent": JSON.parse(summary["/battery/value"].v).percent,
+						"mAh": mAh,
+						"mA": mA,
+						"degC": JSON.parse(summary["/battery/value"].v).degC,
+						"time": new Date().toLocaleTimeString("fr-FR")
+					}
+					
+					document.getElementById("timeEstimation").innerHTML = Math.abs(mAh/mA).toFixed(0)+"h"+((Math.abs(mAh/mA).toFixed(2)-Math.abs(mAh/mA).toFixed(0))*60).toFixed(0)+"min";
+					//exportData(myHistory)
+					exportDataBattery(batteryHistory)
+					//$("#trans").click();
+					$("#send").click();
+					if (batteryValues.series[0].length < 100){
+						batteryValues.series[0].push(mAh);
+					}else{
+						batteryValues.series[0].splice(0, 1);
+						batteryValues.series[0].push(mAh);
+					}
 				},
 				error: function(request, textStatus, errorThrown) {
 					alert(request.getResponseHeader('some_header'));
 					console.log("error");
 				}
 			})
-			let delayRes = await delayDataDashboard(50000);
+			let delayRes = await delayDataDashboard(5000);
 		}		
 
 		function delayDataDashboard(delayRes) {
 			return new Promise(resolve => {
 				setTimeout(() => {
-					// if (todo) {
+					//console.log(todo);
+					if (todo) {
 						dataDashboard();
-					// }
+						new Chartist.Line('#battery-chart', batteryValues, optionsBatteryChart);
+					}
 				}, delayRes);
 			});
 		}
@@ -461,12 +669,30 @@
 			submitData();
 		}
 
+		function exportDataBattery(x){
+			//console.log(x);
+			let content=JSON.stringify(x);
+			document.getElementById("battery").value = content;
+			submitBatteryData();
+		}
+
 		function submitData(){
 			$('#myForm').submit(function(e){
 				e.preventDefault();
 				$.ajax({
 					type: 'post',
 					data:  {myInfo : document.getElementById("temp").value},
+				});
+			});
+			// window.history.replaceState( null, null, window.location.href );
+		}
+
+		function submitBatteryData(){
+			$('#myFormBattery').submit(function(e){
+				e.preventDefault();
+				$.ajax({
+					type: 'post',
+					data:  {batteryInfo : document.getElementById("battery").value},
 				});
 			});
 			// window.history.replaceState( null, null, window.location.href );
